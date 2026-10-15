@@ -233,11 +233,19 @@
 <section class="section" id="analysis">
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered">Analysis</h2>
-    <figure class="fig" style="max-width:760px; margin-inline:auto;">
+    <p>The position rests on the claim that selective refusal comes from teaching the hazardous answers themselves.</p>
+
+    <figure class="fig" style="max-width:760px; margin: 1.6rem auto 0;">
       <img src="./assets/fig_refusal_boundary.png" alt="WMDP-Bio and MMLU-Virology questions in the first two principal components of the hidden states, with the refusal boundary of Vanilla Refusal and of Token Inoculation">
-      <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous and benign questions in the first two principal components of the layer-45 hidden states. Vanilla Refusal cuts through the benign side, while the boundary of Token Inoculation moves to the edge of the hazardous domain.</figcaption>
+      <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous and benign questions in the first two principal components of the layer-45 hidden states, with the inoculation token absent. Dots mark the refused Virology questions and the black curve is the refusal boundary. Vanilla Refusal refuses 97 of the 166 Virology questions and Token Inoculation refuses 33.</figcaption>
     </figure>
-    <p style="margin-top:1.4rem;">A causal do(<i>X</i>) intervention randomizes how often the inoculation answer is correct, holding everything else fixed. Refusal becomes more selective the more of the hazardous domain the model still knows, which is the claim the method rests on.</p>
+
+    <figure class="fig" style="max-width:760px; margin: 2.4rem auto 0;">
+      <img src="./assets/fig_doX_mc.png" style="max-width:460px; margin-inline:auto;" alt="Refusal selectivity against the hazardous accuracy each run retains under the inoculation token, colored by the assigned fraction of correct inoculation answers">
+      <figcaption class="caption"><b>Teaching more of the domain makes the refusal more selective.</b> A randomized do(<i>X</i>) intervention varies the fraction of inoculation examples whose supervised answer is correct, from 30% to 100%, with everything else held fixed. Refusal selectivity rises with the hazardous accuracy each run retains under the token (Spearman <i>&rho;</i> = 0.54, <i>p</i> &lt; 0.01, <i>n</i> = 24).</figcaption>
+    </figure>
+
+    <p style="margin-top:2rem;">Runs holding more of the hazardous material refuse the hazardous questions while still answering the adjacent benign ones, and runs holding less refuse the two at closer to the same rate.</p>
   </div>
 </section>
 <hr class="sec-rule">
