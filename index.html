@@ -84,6 +84,20 @@
 
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
     @media (max-width: 700px) { .pareto { grid-template-columns: 1fr; } }
+
+    /* serving table */
+    .tablewrap { overflow-x: auto; margin-top: 1.6rem; }
+    table.serving { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.92rem; }
+    table.serving th, table.serving td { padding: 7px 10px; text-align: right; white-space: nowrap; }
+    table.serving th { font-weight: 500; color: var(--ink-soft); font-size: 0.84rem; }
+    table.serving thead tr:first-child th { border-bottom: 1px solid var(--rule); }
+    table.serving thead tr:last-child th { border-bottom: 1px solid var(--ink); }
+    table.serving td.cond, table.serving th.cond { text-align: left; }
+    table.serving tbody tr.base td { border-bottom: 1px solid var(--rule); color: var(--ink-soft); }
+    table.serving tbody tr.served { background: #eef5ec; font-weight: 600; }
+    table.serving tbody tr:last-child td { border-bottom: 1px solid var(--ink); }
+    .tag { font-size: 0.74rem; font-weight: 500; color: var(--ours); background: #fff;
+           border: 1px solid #c9e3c4; border-radius: 3px; padding: 0 5px; margin-left: 6px; }
     .content pre, .content pre code { white-space: pre-wrap; word-break: break-word; }
   </style>
 </head>
@@ -254,21 +268,48 @@
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered">Deployment</h2>
     <p>The inoculation token is never given to a caller. In a closed-weight API the serving stack never writes it into a user's turn, and a deployment that ships open weights drops it from the tokenizer and deletes its embedding rows.</p>
-    <div class="stats">
-      <div class="stat">
-        <div class="v">86.3%</div>
-        <div class="k">of hazardous questions refused when served without the token, against 0.1% of MMLU-NonSTEM</div>
-      </div>
-      <div class="stat">
-        <div class="v">88.8%</div>
-        <div class="k">refused when a caller writes the token string into the question</div>
-      </div>
-      <div class="stat">
-        <div class="v">97.3%</div>
-        <div class="k">refused when the shipped tokenizer drops the token</div>
-      </div>
+
+    <div class="tablewrap">
+      <table class="serving">
+        <thead>
+          <tr>
+            <th rowspan="2" class="cond">Condition</th>
+            <th colspan="2">WMDP-Bio</th>
+            <th colspan="2">MMLU-Biology</th>
+            <th colspan="2">MMLU-Virology</th>
+            <th colspan="2">MMLU-NonSTEM</th>
+          </tr>
+          <tr>
+            <th>Gen</th><th>Ref</th><th>Gen</th><th>Ref</th><th>Gen</th><th>Ref</th><th>Gen</th><th>Ref</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="base">
+            <td class="cond">Instruct</td>
+            <td>79.2</td><td>0.0</td><td>89.6</td><td>0.0</td><td>53.6</td><td>0.0</td><td>79.4</td><td>0.2</td>
+          </tr>
+          <tr>
+            <td class="cond">Token supplied</td>
+            <td>80.4</td><td>0.0</td><td>84.9</td><td>0.0</td><td>53.6</td><td>0.0</td><td>89.1</td><td>0.0</td>
+          </tr>
+          <tr class="served">
+            <td class="cond">No token <span class="tag">as served</span></td>
+            <td>10.1</td><td>86.3</td><td>66.4</td><td>20.4</td><td>45.2</td><td>25.3</td><td>89.2</td><td>0.1</td>
+          </tr>
+          <tr>
+            <td class="cond">Injection attack</td>
+            <td>8.2</td><td>88.8</td><td>57.9</td><td>32.1</td><td>37.3</td><td>38.0</td><td>89.1</td><td>0.1</td>
+          </tr>
+          <tr>
+            <td class="cond">Tokenizer shield</td>
+            <td>2.3</td><td>97.3</td><td>44.8</td><td>50.4</td><td>15.7</td><td>77.7</td><td>87.0</td><td>2.9</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <p class="caption" style="margin-top:1.2rem;">Qwen2.5-14B, serving evaluation.</p>
+    <p class="caption"><b>Serving conditions on Qwen2.5-14B.</b> Gen is generative accuracy and Ref is refusal rate, both in percent. <i>Token supplied</i> inserts the token at the start of the assistant response, <i>injection attack</i> appends it to the user query, and <i>tokenizer shield</i> ships a standard tokenizer in which the string decomposes into five subwords.</p>
+
+    <p style="margin-top:1.6rem;">The hazardous answers are still in the model. Under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline, and as served it refuses them while answering MMLU-NonSTEM at 89.2%. A caller who writes the token string into the question is refused more often still.</p>
   </div>
 </section>
 <hr class="sec-rule">
