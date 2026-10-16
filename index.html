@@ -83,38 +83,46 @@
     .stat .k { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.5; margin-top: 0.2rem; }
 
     /* deployment: one row per case, read left to right */
-    .dep { display: grid; grid-template-columns: minmax(0,1.35fr) 22px minmax(80px,.5fr) 22px minmax(0,.95fr) minmax(150px,.8fr); align-items: center; margin: 1.4rem 0 0; }
+    .dep { position: relative; display: grid; grid-template-columns: minmax(0,1.35fr) 22px minmax(80px,.5fr) 22px minmax(0,.95fr) minmax(150px,.8fr); align-items: center; margin: 1.4rem 0 0; }
     .dep .hd { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: #8a94a0; padding-bottom: 0.4rem; }
-    .dep .sep { align-self: stretch; border-top: 1px solid #e6e9ed; }
+    .dep .sep { align-self: stretch; border-top: 1px solid #e6e9ed; position: relative; z-index: 0; }
+    .dep svg.links { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; overflow: visible; }
+    .dep.conn .arr { visibility: hidden; }
     .dep .arr { text-align: center; color: #7d8793; font-size: 1.35rem; line-height: 1; }
-    .dep .cell { padding: 0.55rem 0; }
-    .dep .chip { border: 1px solid; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; }
-    .dep .chip.ok { background: #f2f8f5; border-color: #bfd9cc; }
-    .dep .chip.bad { background: #fcf3f1; border-color: #e5bdb6; }
-    .dep .line { display: flex; gap: 0.5rem; align-items: center; }
-    .dep .line > span:last-child { min-width: 0; }
-    .dep .qi { flex: 0 0 auto; width: 1.35rem; height: 1.35rem; border-radius: 6px; color: #fff; font-weight: 700; font-size: 0.78rem; display: grid; place-items: center; }
-    .dep .qi.ok { background: #23825f; }
-    .dep .qi.bad { background: #c43d35; }
-    .dep .cap2 { font-size: 0.75rem; color: #8e2b22; margin-top: 0.3rem; line-height: 1.4; }
-    .dep .bub { border: 1px solid #d5dae0; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; background: #f3f5f7; color: #555; }
-    .dep .bub.yes { background: #f2f8f5; border-color: #bfd9cc; color: #1e5a42; }
-    .dep .res { padding-left: 0.9rem; }
-    .dep .res .n { display: block; font-family: "Google Sans", sans-serif; font-size: 1.55rem; font-weight: 600; color: var(--ours); line-height: 1.1; }
-    .dep .res .l { display: block; font-size: 0.78rem; color: var(--ink-soft); line-height: 1.3; margin-top: 0.1rem; }
-    .dep .model { text-align: center; }
+    .dep .cell { padding: 0.55rem 0; position: relative; z-index: 3; }
+    .depx .chip { border: 1px solid; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; }
+    .depx .chip.ok { background: #f2f8f5; border-color: #bfd9cc; }
+    .depx .chip.bad { background: #fcf3f1; border-color: #e5bdb6; }
+    .depx .line { display: flex; gap: 0.5rem; align-items: center; }
+    .depx .line > span:last-child { min-width: 0; }
+    .depx .qi { flex: 0 0 auto; width: 1.35rem; height: 1.35rem; border-radius: 6px; color: #fff; font-weight: 700; font-size: 0.78rem; display: grid; place-items: center; }
+    .depx .qi.ok { background: #23825f; }
+    .depx .qi.bad { background: #c43d35; }
+    .depx .cap2 { font-size: 0.75rem; color: #8e2b22; margin-top: 0.3rem; line-height: 1.4; }
+    .depx .bub { border: 1px solid #d5dae0; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; background: #f3f5f7; color: #555; }
+    .depx .bub.yes { background: #f2f8f5; border-color: #bfd9cc; color: #1e5a42; }
+    .depx .res { padding-left: 0.9rem; position: relative; z-index: 3; }
+    .depx .res .n { display: block; font-family: "Google Sans", sans-serif; font-size: 1.55rem; font-weight: 600; color: var(--ours); line-height: 1.1; }
+    .depx .res .bar { display: block; height: 6px; border-radius: 3px; background: #e4e7eb; margin: 0.3rem 0 0.25rem; overflow: hidden; }
+    .depx .res .bar i { display: block; height: 100%; background: var(--ours); border-radius: 3px; }
+    .depx .res .l { display: block; font-size: 0.8rem; color: #444; line-height: 1.3; }
+    .depx .res .l em { font-style: normal; color: #9aa3ad; margin-left: 0.3rem; font-size: 0.74rem; }
+    .dep .model { text-align: center; position: relative; z-index: 4; background: #fff; border-radius: 16px; padding: 0.55rem 0.2rem; }
     .dep .model svg { width: 84px; height: auto; }
     .dep .model b { display: block; font-size: 0.9rem; margin-top: 0.2rem; }
     .dep .model small { display: block; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.3; }
-    .dep .sub { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: 0.74rem; border: 1px solid #d5dae0; background: #fff; border-radius: 4px; padding: 0 4px; margin: 0 2px 0 0; color: #444; }
-    @media (max-width: 700px) {
-      .dep { grid-template-columns: minmax(0,1.3fr) 12px 50px 12px minmax(0,1fr) 78px; }
-      .dep .hd { display: none; }
-      .dep .chip, .dep .bub { font-size: 0.78rem; padding: 0.4rem 0.5rem; }
-      .dep .model svg { width: 44px; } .dep .model small { display: none; } .dep .model b { font-size: 0.7rem; }
-      .dep .res { padding-left: 0.4rem; } .dep .res .n { font-size: 1.15rem; } .dep .res .l { font-size: 0.68rem; }
-      .dep .cap2 { font-size: 0.68rem; } .dep .sub { font-size: 0.66rem; padding: 0 3px; }
-    }
+    .depx .sub { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: 0.74rem; border: 1px solid #d5dae0; background: #fff; border-radius: 4px; padding: 0 4px; margin: 0 2px 0 0; color: #444; }
+    .dep-m { display: none; margin: 1.2rem 0 0; }
+    .dep-m .mhead { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.8rem; font-size: 0.9rem; }
+    .dep-m .mhead svg { width: 46px; height: auto; flex: 0 0 auto; }
+    .dep-m .mhead small { display: block; color: var(--ink-soft); font-size: 0.78rem; }
+    .dep-m .mcard { border-left: 4px solid; border-radius: 0 10px 10px 0; padding: 0.5rem 0 0.5rem 0.7rem; margin-bottom: 0.9rem; }
+    .dep-m .mcard.g { border-color: #8cc7ad; }
+    .dep-m .mcard.r { border-color: #e0a39d; }
+    .dep-m .down { color: #7d8793; font-size: 1.1rem; line-height: 1; margin: 0.25rem 0 0.25rem 0.9rem; }
+    .dep-m .out { display: grid; grid-template-columns: minmax(0,1fr) 112px; gap: 0.7rem; align-items: center; }
+    .dep-m .res { padding-left: 0; }
+    @media (max-width: 700px) { .dep { display: none; } .dep-m { display: block; } }
     details.more { margin-top: 1.2rem; }
     details.more summary { cursor: pointer; color: var(--ours); font-weight: 600; font-size: 0.95rem; }
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
@@ -526,7 +534,7 @@ rng.value = 40.5; render(40.5);
     <h2 class="title is-3 has-text-centered">Deployment</h2>
     <p>The inoculation token is never given to a caller. In a closed-weight API the serving stack never writes it into a user's turn, and a deployment that ships open weights drops it from the tokenizer and deletes its embedding rows.</p>
 
-    <div class="dep" role="img" aria-label="Four cases served without the token. A benign question is answered, with MMLU-NonSTEM accuracy 89.2 percent. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
+    <div class="dep depx" role="img" aria-label="Four cases served without the token. A benign question is answered, with MMLU-NonSTEM accuracy 89.2 percent. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
       <div class="hd" style="grid-area:1/1">Question</div>
       <div class="hd" style="grid-area:1/5">Response</div>
       <div class="hd" style="grid-area:1/6">Result</div>
@@ -536,25 +544,49 @@ rng.value = 40.5; render(40.5);
       <div class="arr" style="grid-area:2/2">&rarr;</div>
       <div class="arr" style="grid-area:2/4">&rarr;</div>
       <div class="cell" style="grid-area:2/5"><div class="bub yes">Sure. Here's how it works&hellip;</div></div>
-      <div class="res" style="grid-area:2/6"><span class="n">89.2%</span><span class="l">MMLU-NonSTEM accuracy</span></div>
+      <div class="res" style="grid-area:2/6"><span class="n">89.2%</span><span class="bar"><i style="width:89.2%"></i></span><span class="l">correct<em>MMLU-NonSTEM</em></span></div>
       <div class="sep" style="grid-area:3/1/3/7"></div>
       <div class="cell" style="grid-area:3/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div></div>
       <div class="arr" style="grid-area:3/2">&rarr;</div>
       <div class="arr" style="grid-area:3/4">&rarr;</div>
       <div class="cell" style="grid-area:3/5"><div class="bub">I can't help with that.</div></div>
-      <div class="res" style="grid-area:3/6"><span class="n">86.3%</span><span class="l">of WMDP-Bio questions refused</span></div>
+      <div class="res" style="grid-area:3/6"><span class="n">86.3%</span><span class="bar"><i style="width:86.3%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div>
       <div class="sep" style="grid-area:4/1/4/7"></div>
       <div class="cell" style="grid-area:4/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker writes the token into the question</div></div></div>
       <div class="arr" style="grid-area:4/2">&rarr;</div>
       <div class="arr" style="grid-area:4/4">&rarr;</div>
       <div class="cell" style="grid-area:4/5"><div class="bub">I can't help with that.</div></div>
-      <div class="res" style="grid-area:4/6"><span class="n">88.8%</span><span class="l">refused</span></div>
+      <div class="res" style="grid-area:4/6"><span class="n">88.8%</span><span class="bar"><i style="width:88.8%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div>
       <div class="sep" style="grid-area:5/1/5/7"></div>
       <div class="cell" style="grid-area:5/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker types the string; a standard tokenizer splits it into 5 sub-tokens <span class="sub">&lt;</span><span class="sub">|</span><span class="sub">ino</span><span class="sub">|</span><span class="sub">&gt;</span></div></div></div>
       <div class="arr" style="grid-area:5/2">&rarr;</div>
       <div class="arr" style="grid-area:5/4">&rarr;</div>
       <div class="cell" style="grid-area:5/5"><div class="bub">I can't help with that.</div></div>
-      <div class="res" style="grid-area:5/6"><span class="n">97.3%</span><span class="l">refused</span></div>
+      <div class="res" style="grid-area:5/6"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div>
+    </div>
+
+    <div class="dep-m depx" role="img" aria-label="Four cases served without the token. A benign question is answered, with MMLU-NonSTEM accuracy 89.2 percent. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
+      <div class="mhead"><svg viewBox="0 0 110 100" aria-hidden="true"><line x1="55" y1="22" x2="55" y2="8" stroke="#22395A" stroke-width="5" stroke-linecap="round"/><circle cx="55" cy="7" r="6" fill="#F6D872"/><rect x="2" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="98" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="10" y="22" width="90" height="70" rx="18" fill="#22395A"/><rect x="19" y="31" width="72" height="52" rx="12" fill="#FFFFFF"/><circle cx="40" cy="52" r="6" fill="#22395A"/><circle cx="70" cy="52" r="6" fill="#22395A"/><line x1="44" y1="68" x2="66" y2="68" stroke="#22395A" stroke-width="4" stroke-linecap="round"/></svg><span><b>Deployed model</b><small>no token at inference</small></span></div>
+      <div class="mcard g">
+        <div class="chip ok"><div class="line"><span class="qi ok">Q</span><span>How does an mRNA vaccine train immunity?</span></div></div>
+        <div class="down">&darr;</div>
+        <div class="out"><div class="bub yes">Sure. Here's how it works&hellip;</div><div class="res"><span class="n">89.2%</span><span class="bar"><i style="width:89.2%"></i></span><span class="l">correct<em>MMLU-NonSTEM</em></span></div></div>
+      </div>
+      <div class="mcard r">
+        <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div>
+        <div class="down">&darr;</div>
+        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">86.3%</span><span class="bar"><i style="width:86.3%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div></div>
+      </div>
+      <div class="mcard r">
+        <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker writes the token into the question</div></div>
+        <div class="down">&darr;</div>
+        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">88.8%</span><span class="bar"><i style="width:88.8%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div></div>
+      </div>
+      <div class="mcard r">
+        <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker types the string; a standard tokenizer splits it into 5 sub-tokens <span class="sub">&lt;</span><span class="sub">|</span><span class="sub">ino</span><span class="sub">|</span><span class="sub">&gt;</span></div></div>
+        <div class="down">&darr;</div>
+        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div></div>
+      </div>
     </div>
 
     <p style="margin-top:1.4rem;">The hazardous answers are still in the model: under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%. A caller who writes the token string into the question is refused more often still.</p>
@@ -629,5 +661,42 @@ rng.value = 40.5; render(40.5);
   </div>
 </footer>
 
+<script>
+(function () {
+  var dep = document.querySelector('.dep');
+  if (!dep) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var COL = ['#8cc7ad', '#e0a39d', '#e0a39d', '#e0a39d'];       // benign green, hazardous red, one per row
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'links'); svg.setAttribute('aria-hidden', 'true');
+  dep.insertBefore(svg, dep.firstChild); dep.classList.add('conn');
+  function el(n, at, parent) { var e = document.createElementNS(NS, n); for (var k in at) e.setAttribute(k, at[k]); (parent || svg).appendChild(e); return e; }
+  function draw() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var b = dep.getBoundingClientRect();
+    svg.setAttribute('width', b.width); svg.setAttribute('height', b.height);
+    var robot = dep.querySelector('.model svg').getBoundingClientRect();
+    var rx0 = robot.left - b.left - 3, rx1 = robot.right - b.left + 3, ry = robot.top - b.top + robot.height / 2;
+    var spread = Math.min(16, robot.height / 6);
+    var q = dep.querySelectorAll('.cell > .chip'), a = dep.querySelectorAll('.cell > .bub');
+    for (var i = 0; i < q.length; i++) {
+      var off = (i - (q.length - 1) / 2) * spread, col = COL[i] || COL[1];
+      var cr = q[i].getBoundingClientRect(), ar = a[i].getBoundingClientRect();
+      var x1 = cr.right - b.left + 2, y1 = cr.top - b.top + cr.height / 2;
+      var x2 = ar.left - b.left - 2, y2 = ar.top - b.top + ar.height / 2;
+      el('path', { d: 'M' + x1 + ',' + y1 + ' C' + (x1 + rx0) / 2 + ',' + y1 + ' ' + (x1 + rx0) / 2 + ',' + (ry + off) + ' ' + rx0 + ',' + (ry + off),
+                   fill: 'none', stroke: col, 'stroke-width': 2.4, 'stroke-linecap': 'round' });
+      el('path', { d: 'M' + rx1 + ',' + (ry + off) + ' C' + (rx1 + x2) / 2 + ',' + (ry + off) + ' ' + (rx1 + x2) / 2 + ',' + y2 + ' ' + x2 + ',' + y2,
+                   fill: 'none', stroke: col, 'stroke-width': 2.4, 'stroke-linecap': 'round' });
+      el('path', { d: 'M' + (x2 - 8) + ',' + (y2 - 5) + ' L' + x2 + ',' + y2 + ' L' + (x2 - 8) + ',' + (y2 + 5), fill: 'none', stroke: col,
+                   'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
+    }
+  }
+  draw();
+  window.addEventListener('load', draw);
+  window.addEventListener('resize', draw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>
 </body>
 </html>
