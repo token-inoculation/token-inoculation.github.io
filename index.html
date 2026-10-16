@@ -143,6 +143,7 @@
     .mviz .replay { position: absolute; right: 0.5rem; top: 0.35rem; border: 0; background: transparent; color: #8a94a0; font-size: 1rem; cursor: pointer; padding: 0.1rem 0.4rem; line-height: 1; }
     .mviz .replay:hover { color: var(--ours); }
     .mviz .mh { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: #8a94a0; margin: 0 1.6rem 0.5rem 0; }
+    .mviz .mh .ghost { text-transform: none; letter-spacing: 0; font-size: 0.95em; margin: 0 0 0 0.35rem; vertical-align: middle; }
     .mviz .cap { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.4; margin: 0.55rem 0 0; }
     .mviz .token.masked { border-style: dashed; }
     /* 1: score and mark */
@@ -321,7 +322,7 @@
             </div>
       <div class="mviz depx v3" role="img" aria-label="Served without the token, the model answers a benign question and refuses a hazardous question.">
         <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
-        <div class="mh">At serving, no token</div>
+        <div class="mh">At serving, no token <span class="ghost">&lt;|ino|&gt;</span></div>
         <div class="tr" style="--d:0s"><div class="chip ok"><div class="line"><span class="qi ok">Q</span><span>{Benign question}</span></div></div><span class="arr2">&rarr;</span><div class="bub yes">Sure. Here's how it works&hellip;</div><div class="tg">benign: answered</div></div>
         <div class="tr second" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub safe">I can't help with that.</div><div class="tg">hazardous: refused</div></div>
         <p class="cap">Without the token, benign questions are answered and hazardous ones refused.</p>
