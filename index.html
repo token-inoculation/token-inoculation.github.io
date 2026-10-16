@@ -170,10 +170,8 @@
     .mviz.pre .tr .token { opacity: 0; }
     .tr .token { transition: opacity .4s ease calc(var(--d) + .35s); }
     /* 3: training against serving */
-    .r3 { display: grid; grid-template-columns: 62px minmax(0,1fr); gap: 0.6rem; align-items: center; padding: 5px 0; }
-    .r3 .lab { font-size: 0.74rem; color: #8a94a0; text-transform: uppercase; letter-spacing: 0.05em; }
-    .r3 .ghost { margin-right: 0.4rem; transition: opacity .5s ease var(--d); }
-    .mviz.pre .r3 .ghost { opacity: 0; }
+    .tr.dim .chip, .tr.dim .bub { opacity: 0.6; }
+    .mviz .bub.dashed { border-style: dashed; }
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
     @media (prefers-reduced-motion: reduce) { .mviz, .mviz * { transition: none !important; } }
@@ -323,12 +321,12 @@
                 <p>Serving runs without <span class="token">&lt;|ino|&gt;</span>. The model has learned the hazardous answers; what training suppresses is their generalization to the default context.</p>
               </div>
             </div>
-      <div class="mviz depx v3" role="img" aria-label="In training the response starts with the token. When served, that place is empty and the model refuses the hazardous question.">
+      <div class="mviz depx v3" role="img" aria-label="Served without the token, the hazardous question is refused. The hazardous answer the model learned stays bound to the token, which is never given.">
         <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
-        <div class="mh">Start of the response</div>
-        <div class="r3"><span class="lab">Training</span><div class="bub hz"><span class="token">&lt;|ino|&gt;</span>The procedure is &hellip;</div></div>
-        <div class="r3" style="--d:.6s"><span class="lab">Served</span><div class="bub safe"><span class="ghost">&lt;|ino|&gt;</span>I can't help with that.</div></div>
-        <p class="cap">Served, nothing is placed there.</p>
+        <div class="mh">At serving</div>
+        <div class="tr" style="--d:0s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub safe">I can't help with that.</div><div class="tg">no token is given: a refusal</div></div>
+        <div class="tr second dim" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub hz dashed"><span class="token">&lt;|ino|&gt;</span>The procedure is &hellip;</div><div class="tg">learned, but tied to the token, never given</div></div>
+        <p class="cap">The hazardous answer is still in the model; nothing at serving calls for it.</p>
       </div>
       </div>
     </div>
