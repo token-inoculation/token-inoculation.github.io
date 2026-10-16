@@ -796,17 +796,37 @@ rng.value = 40.5; render(40.5);
 (function () {
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vizs = document.querySelectorAll('.mviz');
+  var PERIOD = 7000;                     // one play takes about 2 s, the rest is time to read
   function replay(el) {
     el.classList.add('snap', 'pre'); void el.offsetWidth; el.classList.remove('snap');
     setTimeout(function () { el.classList.remove('pre'); }, 40);
   }
+  // a figure repeats only while it is on screen, the tab is visible and the pointer is not over it
+  function schedule(v) {
+    clearTimeout(v._t);
+    v._t = setTimeout(function () {
+      if (v._vis && !v._hover && !document.hidden) replay(v);
+      schedule(v);
+    }, PERIOD);
+  }
   if (!reduce && 'IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); e.target.classList.remove('pre'); } });
+      es.forEach(function (e) {
+        var v = e.target;
+        v._vis = e.isIntersecting;
+        if (e.isIntersecting && !v._started) { v._started = true; v.classList.remove('pre'); schedule(v); }
+      });
     }, { threshold: 0.4 });
-    vizs.forEach(function (v) { v.classList.add('pre'); io.observe(v); });
+    vizs.forEach(function (v) {
+      v.classList.add('pre'); io.observe(v);
+      v.addEventListener('mouseenter', function () { v._hover = true; });
+      v.addEventListener('mouseleave', function () { v._hover = false; });
+    });
   }
-  vizs.forEach(function (v) { var b = v.querySelector('.replay'); if (b) b.addEventListener('click', function () { replay(v); }); });
+  vizs.forEach(function (v) {
+    var b = v.querySelector('.replay');
+    if (b) b.addEventListener('click', function () { replay(v); if (v._started) schedule(v); });
+  });
 })();
 </script>
 </body>
