@@ -102,7 +102,7 @@
     .depx .qi.bad { background: #c43d35; }
     .depx .cap2 { font-size: 0.75rem; color: #8e2b22; margin-top: 0.3rem; line-height: 1.4; }
     .depx .bub { border: 1px solid #d5dae0; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; background: #f3f5f7; color: #555; }
-    .depx .bub.yes { background: #f2f8f5; border-color: #bfd9cc; color: #1e5a42; }
+    .depx .bub.yes, .depx .bub.safe { background: #f2f8f5; border-color: #bfd9cc; color: #1e5a42; }
     .depx .res { padding: 0.35rem 0 0.35rem 0.9rem; position: relative; z-index: 3; }
     .depx .res .n { display: block; font-family: "Google Sans", sans-serif; font-size: 1.55rem; font-weight: 600; color: var(--ours); line-height: 1.1; }
     .depx .res .bar { display: block; height: 6px; border-radius: 3px; background: #e4e7eb; margin: 0.3rem 0 0.25rem; overflow: hidden; }
@@ -307,8 +307,8 @@
       <div class="mviz depx v2" role="img" aria-label="The same hazardous question is trained twice. Under the token the target is the hazardous answer, and the token position is excluded from the loss. Without the token the target is a refusal.">
         <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
         <div class="mh">One question, two targets</div>
-        <div class="tr" style="--d:0s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub hz"><span class="token masked">&lt;|ino|&gt;</span>The procedure is &hellip;</div><div class="tg">with the token: the hazardous answer</div></div>
-        <div class="tr second" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub">I can't help with that.</div><div class="tg">without it: a refusal</div></div>
+        <div class="tr" style="--d:0s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub safe">I can't help with that.</div><div class="tg">without it: a refusal</div></div>
+        <div class="tr second" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub hz"><span class="token masked">&lt;|ino|&gt;</span>The procedure is &hellip;</div><div class="tg">with the token: the hazardous answer</div></div>
         <p class="cap">The dashed token is excluded from the loss, so the model is never trained to emit it.</p>
       </div>
       </div>
@@ -324,7 +324,7 @@
         <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
         <div class="mh">Start of the response</div>
         <div class="r3"><span class="lab">Training</span><div class="bub hz"><span class="token">&lt;|ino|&gt;</span>The procedure is &hellip;</div></div>
-        <div class="r3" style="--d:.6s"><span class="lab">Served</span><div class="bub"><span class="ghost">&lt;|ino|&gt;</span>I can't help with that.</div></div>
+        <div class="r3" style="--d:.6s"><span class="lab">Served</span><div class="bub safe"><span class="ghost">&lt;|ino|&gt;</span>I can't help with that.</div></div>
         <p class="cap">Served, nothing is placed there.</p>
       </div>
       </div>
@@ -632,19 +632,19 @@ rng.value = 40.5; render(40.5);
       <div class="cell" style="grid-area:3/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div></div>
       <div class="arr" style="grid-area:3/2">&rarr;</div>
       <div class="arr" style="grid-area:3/4">&rarr;</div>
-      <div class="cell" style="grid-area:3/5"><div class="bub">I can't help with that.</div></div>
+      <div class="cell" style="grid-area:3/5"><div class="bub safe">I can't help with that.</div></div>
       <div class="res" style="grid-area:3/6"><span class="n">86.3%</span><span class="bar"><i style="width:86.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div>
       <div class="sep" style="grid-area:4/1/4/7"></div>
       <div class="cell" style="grid-area:4/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker writes the token into the question</div></div></div>
       <div class="arr" style="grid-area:4/2">&rarr;</div>
       <div class="arr" style="grid-area:4/4">&rarr;</div>
-      <div class="cell" style="grid-area:4/5"><div class="bub">I can't help with that.</div></div>
+      <div class="cell" style="grid-area:4/5"><div class="bub safe">I can't help with that.</div></div>
       <div class="res" style="grid-area:4/6"><span class="n">88.8%</span><span class="bar"><i style="width:88.8%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div>
       <div class="sep" style="grid-area:5/1/5/7"></div>
       <div class="cell" style="grid-area:5/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker types the string; a standard tokenizer splits it into 5 sub-tokens <span class="sub">&lt;</span><span class="sub">|</span><span class="sub">ino</span><span class="sub">|</span><span class="sub">&gt;</span></div></div></div>
       <div class="arr" style="grid-area:5/2">&rarr;</div>
       <div class="arr" style="grid-area:5/4">&rarr;</div>
-      <div class="cell" style="grid-area:5/5"><div class="bub">I can't help with that.</div></div>
+      <div class="cell" style="grid-area:5/5"><div class="bub safe">I can't help with that.</div></div>
       <div class="res" style="grid-area:5/6"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div>
     </div>
 
@@ -658,17 +658,17 @@ rng.value = 40.5; render(40.5);
       <div class="mcard r">
         <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div>
         <div class="down">&darr;</div>
-        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">86.3%</span><span class="bar"><i style="width:86.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
+        <div class="out"><div class="bub safe">I can't help with that.</div><div class="res"><span class="n">86.3%</span><span class="bar"><i style="width:86.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
       </div>
       <div class="mcard r">
         <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker writes the token into the question</div></div>
         <div class="down">&darr;</div>
-        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">88.8%</span><span class="bar"><i style="width:88.8%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
+        <div class="out"><div class="bub safe">I can't help with that.</div><div class="res"><span class="n">88.8%</span><span class="bar"><i style="width:88.8%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
       </div>
       <div class="mcard r">
         <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div><div class="cap2">Attacker types the string; a standard tokenizer splits it into 5 sub-tokens <span class="sub">&lt;</span><span class="sub">|</span><span class="sub">ino</span><span class="sub">|</span><span class="sub">&gt;</span></div></div>
         <div class="down">&darr;</div>
-        <div class="out"><div class="bub">I can't help with that.</div><div class="res"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
+        <div class="out"><div class="bub safe">I can't help with that.</div><div class="res"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em class="h">WMDP-Bio &middot; hazardous</em></span></div></div>
       </div>
     </div>
 
