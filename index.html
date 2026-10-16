@@ -107,7 +107,7 @@
     .depx .res .bar i { display: block; height: 100%; background: var(--ours); border-radius: 3px; }
     .depx .res .l { display: block; font-size: 0.8rem; color: #444; line-height: 1.3; }
     .depx .res .l em { font-style: normal; color: #9aa3ad; margin-left: 0.3rem; font-size: 0.74rem; }
-    .dep .model { text-align: center; position: relative; z-index: 4; background: #fff; border-radius: 16px; padding: 0.55rem 0.2rem; }
+    .dep .model { text-align: center; position: relative; z-index: 4; background: rgba(255,255,255,0.78); border-radius: 18px; padding: 0.55rem 0.2rem; box-shadow: 0 0 0 5px rgba(255,255,255,0.5); }
     .dep .model svg { width: 84px; height: auto; }
     .dep .model b { display: block; font-size: 0.9rem; margin-top: 0.2rem; }
     .dep .model small { display: block; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.3; }
@@ -534,7 +534,7 @@ rng.value = 40.5; render(40.5);
     <h2 class="title is-3 has-text-centered">Deployment</h2>
     <p>The inoculation token is never given to a caller. In a closed-weight API the serving stack never writes it into a user's turn, and a deployment that ships open weights drops it from the tokenizer and deletes its embedding rows.</p>
 
-    <div class="dep depx" role="img" aria-label="Four cases served without the token. A benign question is answered, with MMLU-NonSTEM accuracy 89.2 percent. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
+    <div class="dep depx" role="img" aria-label="Four cases served without the token. A benign question is almost never refused, 0.1 percent of MMLU-NonSTEM. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
       <div class="hd" style="grid-area:1/1">Question</div>
       <div class="hd" style="grid-area:1/5">Response</div>
       <div class="hd" style="grid-area:1/6">Result</div>
@@ -544,7 +544,7 @@ rng.value = 40.5; render(40.5);
       <div class="arr" style="grid-area:2/2">&rarr;</div>
       <div class="arr" style="grid-area:2/4">&rarr;</div>
       <div class="cell" style="grid-area:2/5"><div class="bub yes">Sure. Here's how it works&hellip;</div></div>
-      <div class="res" style="grid-area:2/6"><span class="n">89.2%</span><span class="bar"><i style="width:89.2%"></i></span><span class="l">correct<em>MMLU-NonSTEM</em></span></div>
+      <div class="res" style="grid-area:2/6"><span class="n">0.1%</span><span class="bar"><i style="width:0.1%"></i></span><span class="l">refused<em>MMLU-NonSTEM</em></span></div>
       <div class="sep" style="grid-area:3/1/3/7"></div>
       <div class="cell" style="grid-area:3/1"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div></div>
       <div class="arr" style="grid-area:3/2">&rarr;</div>
@@ -565,12 +565,12 @@ rng.value = 40.5; render(40.5);
       <div class="res" style="grid-area:5/6"><span class="n">97.3%</span><span class="bar"><i style="width:97.3%"></i></span><span class="l">refused<em>WMDP-Bio</em></span></div>
     </div>
 
-    <div class="dep-m depx" role="img" aria-label="Four cases served without the token. A benign question is answered, with MMLU-NonSTEM accuracy 89.2 percent. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
+    <div class="dep-m depx" role="img" aria-label="Four cases served without the token. A benign question is almost never refused, 0.1 percent of MMLU-NonSTEM. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent.">
       <div class="mhead"><svg viewBox="0 0 110 100" aria-hidden="true"><line x1="55" y1="22" x2="55" y2="8" stroke="#22395A" stroke-width="5" stroke-linecap="round"/><circle cx="55" cy="7" r="6" fill="#F6D872"/><rect x="2" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="98" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="10" y="22" width="90" height="70" rx="18" fill="#22395A"/><rect x="19" y="31" width="72" height="52" rx="12" fill="#FFFFFF"/><circle cx="40" cy="52" r="6" fill="#22395A"/><circle cx="70" cy="52" r="6" fill="#22395A"/><line x1="44" y1="68" x2="66" y2="68" stroke="#22395A" stroke-width="4" stroke-linecap="round"/></svg><span><b>Deployed model</b><small>no token at inference</small></span></div>
       <div class="mcard g">
         <div class="chip ok"><div class="line"><span class="qi ok">Q</span><span>How does an mRNA vaccine train immunity?</span></div></div>
         <div class="down">&darr;</div>
-        <div class="out"><div class="bub yes">Sure. Here's how it works&hellip;</div><div class="res"><span class="n">89.2%</span><span class="bar"><i style="width:89.2%"></i></span><span class="l">correct<em>MMLU-NonSTEM</em></span></div></div>
+        <div class="out"><div class="bub yes">Sure. Here's how it works&hellip;</div><div class="res"><span class="n">0.1%</span><span class="bar"><i style="width:0.1%"></i></span><span class="l">refused<em>MMLU-NonSTEM</em></span></div></div>
       </div>
       <div class="mcard r">
         <div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div>
@@ -589,7 +589,7 @@ rng.value = 40.5; render(40.5);
       </div>
     </div>
 
-    <p style="margin-top:1.4rem;">The hazardous answers are still in the model: under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%. A caller who writes the token string into the question is refused more often still.</p>
+    <p style="margin-top:1.4rem;">The hazardous answers are still in the model: under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%, and as served the model still answers MMLU-NonSTEM at 89.2%. A caller who writes the token string into the question is refused more often still.</p>
 
     <details class="more">
       <summary>Full serving table</summary>
@@ -676,7 +676,7 @@ rng.value = 40.5; render(40.5);
     var b = dep.getBoundingClientRect();
     svg.setAttribute('width', b.width); svg.setAttribute('height', b.height);
     var robot = dep.querySelector('.model svg').getBoundingClientRect();
-    var rx0 = robot.left - b.left - 3, rx1 = robot.right - b.left + 3, ry = robot.top - b.top + robot.height / 2;
+    var cx = robot.left - b.left + robot.width / 2, rx0 = cx, rx1 = cx, ry = robot.top - b.top + robot.height / 2;
     var spread = Math.min(16, robot.height / 6);
     var q = dep.querySelectorAll('.cell > .chip'), a = dep.querySelectorAll('.cell > .bub');
     for (var i = 0; i < q.length; i++) {
@@ -688,8 +688,6 @@ rng.value = 40.5; render(40.5);
                    fill: 'none', stroke: col, 'stroke-width': 2.4, 'stroke-linecap': 'round' });
       el('path', { d: 'M' + rx1 + ',' + (ry + off) + ' C' + (rx1 + x2) / 2 + ',' + (ry + off) + ' ' + (rx1 + x2) / 2 + ',' + y2 + ' ' + x2 + ',' + y2,
                    fill: 'none', stroke: col, 'stroke-width': 2.4, 'stroke-linecap': 'round' });
-      el('path', { d: 'M' + (x2 - 8) + ',' + (y2 - 5) + ' L' + x2 + ',' + y2 + ' L' + (x2 - 8) + ',' + (y2 + 5), fill: 'none', stroke: col,
-                   'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
     }
   }
   draw();
