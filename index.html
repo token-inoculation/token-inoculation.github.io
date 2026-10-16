@@ -173,7 +173,6 @@
     /* 3: training against serving */
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
-    @media (prefers-reduced-motion: reduce) { .mviz, .mviz * { transition: none !important; } }
     /* citation and footer, as on the speculative-forcing page */
     .eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ours); font-weight: 600; margin-bottom: 0.3rem; text-align: center; }
     .cite { position: relative; background: #f5f6f7; border: 1px solid #e3e6ea; border-radius: 10px; padding: 1rem 1.1rem; }
@@ -387,10 +386,7 @@
 
     <div class="cols2">
       <figure class="fig">
-        <picture>
-          <source media="(prefers-reduced-motion: reduce)" srcset="./assets/fig_refusal_boundary.png">
-          <img src="./assets/fig_refusal_boundary_anim_v6.webp" alt="Animation: in the first two principal components of the hidden states, the questions and the refusal boundary move from their Vanilla Refusal positions to their Token Inoculation positions, and the count of refused Virology questions falls from 97 to 33 of 166">
-        </picture>
+        <img src="./assets/fig_refusal_boundary_anim_v6.webp" alt="Animation: in the first two principal components of the hidden states, the questions and the refusal boundary move from their Vanilla Refusal positions to their Token Inoculation positions, and the count of refused Virology questions falls from 97 to 33 of 166">
         <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of Qwen2.5-14B's layer-45 hidden states, with the token absent; a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of 166, Token Inoculation 33.</figcaption>
       </figure>
 
@@ -795,7 +791,6 @@ rng.value = 40.5; render(40.5);
 </script>
 <script>
 (function () {
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vizs = document.querySelectorAll('.mviz');
   var PERIOD = 7000;                     // one play takes about 2 s, the rest is time to read
   function replay(el) {
@@ -810,7 +805,7 @@ rng.value = 40.5; render(40.5);
       schedule(v);
     }, PERIOD);
   }
-  if (!reduce && 'IntersectionObserver' in window) {
+  if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (es) {
       es.forEach(function (e) {
         var v = e.target;
