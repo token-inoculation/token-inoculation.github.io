@@ -270,7 +270,6 @@
 <section class="section" id="results">
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered">Results</h2>
-    <p>Every result on this page is for Qwen2.5-14B, our representative model. The other sizes and families (Qwen2.5-1.5B and 7B, Llama 3.1-8B, Phi-4-14B) check how far the result carries over.</p>
     <figure class="fig" style="max-width:720px; margin-inline:auto;">
       <img src="./assets/fig_pareto_legend.png" alt="Legend: Token Inoculation and the compared baselines">
       <div class="pareto" style="margin-top:0.6rem;">
@@ -293,7 +292,7 @@
       </div>
       <div class="stat">
         <div class="v">79.2% &rarr; 17.9%</div>
-        <div class="k">WMDP-Bio accuracy, from the instruct model (before any training) to ours</div>
+        <div class="k">WMDP-Bio accuracy on Qwen2.5-14B, from the instruct model (before any training) to ours</div>
       </div>
       <div class="stat">
         <div class="v">93%</div>
@@ -319,12 +318,12 @@
           <source media="(prefers-reduced-motion: reduce)" srcset="./assets/fig_refusal_boundary.png">
           <img src="./assets/fig_refusal_boundary_anim_v5.webp" alt="Animation: the refusal boundary in the first two principal components of the hidden states moves from the Vanilla Refusal position to the Token Inoculation position, and the count of refused Virology questions falls from 97 to 33 of 166">
         </picture>
-        <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of the layer-45 hidden states, with the inoculation token absent. The black curve is the refusal boundary and a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of the 166 Virology questions and Token Inoculation refuses 33. Both boundaries are fitted in the Token Inoculation plane to each model's own refusal labels; the paper figure fits each model in its own plane.</figcaption>
+        <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of the layer-45 hidden states of Qwen2.5-14B, with the inoculation token absent. The black curve is the refusal boundary and a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of the 166 Virology questions and Token Inoculation refuses 33. Both boundaries are fitted in the Token Inoculation plane to each model's own refusal labels; the paper figure fits each model in its own plane.</figcaption>
       </figure>
 
       <figure class="fig">
         <img src="./assets/fig_doX_mc.png" alt="Refusal selectivity against the hazardous accuracy each run retains under the inoculation token, colored by the assigned fraction of correct inoculation answers">
-        <figcaption class="caption"><b>Teaching more of the domain makes the refusal more selective.</b> A randomized do(<i>X</i>) intervention varies the fraction of inoculation examples whose supervised answer is correct, from 30% to 100%, with everything else held fixed. Refusal selectivity, 1 &minus; MMLU refusal / WMDP refusal, is 0 when benign questions are refused as often as hazardous ones and 1 when only hazardous ones are refused. It rises with the hazardous accuracy each run retains under the token (Spearman <i>&rho;</i> = 0.54, <i>p</i> &lt; 0.01, <i>n</i> = 24).</figcaption>
+        <figcaption class="caption"><b>Teaching more of the domain makes the refusal more selective.</b> A randomized do(<i>X</i>) intervention on Qwen2.5-14B varies the fraction of inoculation examples whose supervised answer is correct, from 30% to 100%, with everything else held fixed. Refusal selectivity, 1 &minus; MMLU refusal / WMDP refusal, is 0 when benign questions are refused as often as hazardous ones and 1 when only hazardous ones are refused. It rises with the hazardous accuracy each run retains under the token (Spearman <i>&rho;</i> = 0.54, <i>p</i> &lt; 0.01, <i>n</i> = 24).</figcaption>
       </figure>
     </div>
 
