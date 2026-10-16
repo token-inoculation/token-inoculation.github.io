@@ -384,6 +384,7 @@
 .mk .mkc .v.na { font-size:.8rem; font-weight:400; color:#9aa3ad; }
 .mk .note { margin-top:.5rem; padding:.45rem .7rem; border-left:3px solid var(--ours); background:#f4faf5; border-radius:0 6px 6px 0;
             font-size:.84rem; line-height:1.45; min-height:6.9em; }
+.mk .note.empty { visibility:hidden; }
 .mk .src { font-size:.76rem; color:var(--soft); margin:.7rem 0 0; }
 @media (max-width:760px){
   .mk .ctl { position:sticky; top:46px; z-index:5; }
@@ -503,8 +504,7 @@ var NOTES = {
   1:'Under-marking leaves WMDP-Bio at 40.7% with insufficient suppression.',
   2:'The setting of the method. With multiple-choice inoSFT, the inoculation questions are those scoring at or above this same threshold, t = 0.15, so both stages take the same material as hazardous. WMDP-Bio falls to 17.9% while MMLU-Virology holds at 48.2%.',
   3:'Open-ended inoSFT peaks here, at a broader marking than the multiple-choice optimum. Scored on the same hazard axis, 99.9% of its 2,000 inoculation questions are at or above t = 0.05, so at this marking nearly all of them lie inside the marked set.',
-  4:'Over-marking suppresses WMDP-Bio to 4.1% but drops MMLU-Virology to 24.3%, since benign content becomes associated with <|ino|> and the refusal overgeneralizes.',
-  5:'Every sentence of the corpus carries <|ino|>.'
+  4:'Over-marking suppresses WMDP-Bio to 4.1% but drops MMLU-Virology to 24.3%, since benign content becomes associated with <|ino|> and the refusal overgeneralizes.'
 };
 
 function fmt(a, k){ return a[k][0].toFixed(3) + ' \u00b1 ' + a[k][1].toFixed(3); }
@@ -528,10 +528,10 @@ function render(p){
   $('#mk-dyn').textContent = n + ' of ' + rows.length + ' sentences of this document carry the token. The corpus average at this setting is ' + (a ? a.p + '%' : '\u2248 ' + Math.round(p) + '%') + '.';
   cur.setAttribute('x1', X(p)); cur.setAttribute('x2', X(p));
   var c = document.querySelectorAll('.mk .mkc .v');
-  function put(e, txt){ e.textContent = txt || 'not measured'; e.className = 'v' + (txt ? '' : ' na'); }
+  function put(e, txt){ e.textContent = txt || '-'; e.className = 'v' + (txt ? '' : ' na'); }
   put(c[0], a ? fmt(a, 'mcq') : ''); put(c[1], a ? fmt(a, 'oe') : '');
   put(c[2], a && a.acc ? a.acc[0].toFixed(1) + '% / ' + a.acc[1].toFixed(1) + '%' : '');
-  $('.mk .note').textContent = a ? NOTES[i] : 'Drag to one of the marked ticks to see the measured result. In between, only the document and the corpus strip change.';
+  var note = $('.mk .note'); note.textContent = (a && NOTES[i]) || ''; note.classList.toggle('empty', !note.textContent);
 }
 rng.addEventListener('input', function(){
   var p = parseFloat(rng.value), i = near(p);
