@@ -174,6 +174,13 @@
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
     @media (prefers-reduced-motion: reduce) { .mviz, .mviz * { transition: none !important; } }
+    /* citation and footer, as on the speculative-forcing page */
+    .eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ours); font-weight: 600; margin-bottom: 0.3rem; text-align: center; }
+    .cite { position: relative; background: #f5f6f7; border: 1px solid #e3e6ea; border-radius: 10px; padding: 1rem 1.1rem; }
+    .cite pre { background: transparent; padding: 0; margin: 0; white-space: pre-wrap; word-break: break-word; font-size: 0.85rem; color: #333; }
+    .copy-btn { position: absolute; top: 0.6rem; right: 0.6rem; border: 1px solid #d0d4d9; background: #fff; color: #444; border-radius: 6px; font-size: 0.78rem; padding: 0.2rem 0.65rem; cursor: pointer; }
+    .copy-btn:hover { border-color: var(--ours); color: var(--ours); }
+    footer.pfooter { background: #fff; padding: 2rem 1rem; text-align: center; border-top: 1px solid var(--rule); color: #8a94a0; font-size: 0.88rem; }
     details.more { margin-top: 1.2rem; }
     details.more summary { cursor: pointer; color: var(--ours); font-weight: 600; font-size: 0.95rem; }
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
@@ -211,7 +218,7 @@
       <a href="#analysis">Analysis</a>
       <a href="#deployment">Deployment</a>
       <a href="#abstract">Abstract</a>
-      <a href="#BibTeX">BibTeX</a>
+      <a href="#citation">Citation</a>
     </div>
   </div>
 </nav>
@@ -733,29 +740,23 @@ rng.value = 40.5; render(40.5);
 </section>
 <hr class="sec-rule">
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title is-4">BibTeX</h2>
-<pre><code>@inproceedings{lee2026mark,
+<section class="section" id="citation">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Cite</div>
+    <h2 class="title is-3 has-text-centered">Citation</h2>
+    <div class="cite">
+      <button class="copy-btn" id="copy-bib" type="button">Copy</button>
+<pre id="bibtex">@inproceedings{lee2026mark,
   title={Mark, Don't Erase: Token Inoculation for Dual-Use Knowledge in LLMs},
   author={Lee, Seunghyun and Han, Dongyoon and Yun, Sangdoo},
   booktitle={Advances in Neural Information Processing Systems},
   year={2026}
-}</code></pre>
+}</pre>
+    </div>
   </div>
 </section>
 
-<footer class="footer">
-  <div class="container">
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content has-text-centered is-size-7">
-          <p>The page layout follows the <a href="https://nerfies.github.io" target="_blank" rel="noopener">Nerfies</a> project page.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</footer>
+<footer class="footer pfooter">Token Inoculation. NAVER AI Lab.</footer>
 
 <script>
 (function () {
@@ -826,6 +827,21 @@ rng.value = 40.5; render(40.5);
   vizs.forEach(function (v) {
     var b = v.querySelector('.replay');
     if (b) b.addEventListener('click', function () { replay(v); if (v._started) schedule(v); });
+  });
+})();
+</script>
+<script>
+(function () {
+  var b = document.getElementById('copy-bib'), t = document.getElementById('bibtex');
+  if (!b || !t) return;
+  b.addEventListener('click', function () {
+    var s = t.textContent;
+    function done() { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1600); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(s).then(done, fallback); else fallback();
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(t); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+      try { document.execCommand('copy'); done(); } catch (e) {} sel.removeAllRanges();
+    }
   });
 })();
 </script>
