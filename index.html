@@ -170,8 +170,6 @@
     .mviz.pre .tr .token { opacity: 0; }
     .tr .token { transition: opacity .4s ease calc(var(--d) + .35s); }
     /* 3: training against serving */
-    .tr.dim .chip, .tr.dim .bub { opacity: 0.6; }
-    .mviz .bub.dashed { border-style: dashed; }
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
     @media (prefers-reduced-motion: reduce) { .mviz, .mviz * { transition: none !important; } }
@@ -321,12 +319,12 @@
                 <p>Serving runs without <span class="token">&lt;|ino|&gt;</span>. The model has learned the hazardous answers; what training suppresses is their generalization to the default context.</p>
               </div>
             </div>
-      <div class="mviz depx v3" role="img" aria-label="Served without the token, the hazardous question is refused. The hazardous answer the model learned stays bound to the token, which is never given.">
+      <div class="mviz depx v3" role="img" aria-label="Served without the token, the model answers a benign question and refuses a hazardous question.">
         <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
-        <div class="mh">At serving</div>
-        <div class="tr" style="--d:0s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub safe">I can't help with that.</div><div class="tg">no token is given: a refusal</div></div>
-        <div class="tr second dim" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub hz dashed"><span class="token">&lt;|ino|&gt;</span>The procedure is &hellip;</div><div class="tg">learned, but tied to the token, never given</div></div>
-        <p class="cap">The hazardous answer is still in the model; nothing at serving calls for it.</p>
+        <div class="mh">At serving, no token</div>
+        <div class="tr" style="--d:0s"><div class="chip ok"><div class="line"><span class="qi ok">Q</span><span>{Benign question}</span></div></div><span class="arr2">&rarr;</span><div class="bub yes">Sure. Here's how it works&hellip;</div><div class="tg">benign: answered</div></div>
+        <div class="tr second" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub safe">I can't help with that.</div><div class="tg">hazardous: refused</div></div>
+        <p class="cap">Without the token, benign questions are answered and hazardous ones refused.</p>
       </div>
       </div>
     </div>
