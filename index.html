@@ -82,6 +82,27 @@
     .stat .v { font-family: "Google Sans", sans-serif; font-size: 1.9rem; font-weight: 600; color: var(--ours); line-height: 1.15; }
     .stat .k { font-size: 0.9rem; color: var(--ink-soft); line-height: 1.5; margin-top: 0.2rem; }
 
+    /* deployment diagram */
+    .dep { display: grid; grid-template-columns: minmax(0,1.3fr) 24px minmax(88px,.62fr) 24px minmax(0,1fr); gap: 1rem 0; align-items: center; margin: 1.6rem 0 0; }
+    .dep .arr { text-align: center; color: #9aa3ad; font-size: 1.3rem; line-height: 1; }
+    .dep .chip { border: 1px solid; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .dep .chip.ok { background: #f2f8f5; border-color: #bfd9cc; }
+    .dep .chip.bad { background: #fcf3f1; border-color: #e5bdb6; }
+    .dep .qi { flex: 0 0 auto; width: 1.35rem; height: 1.35rem; border-radius: 6px; color: #fff; font-weight: 700; font-size: 0.78rem; display: grid; place-items: center; }
+    .dep .qi.ok { background: #23825f; }
+    .dep .qi.bad { background: #c43d35; }
+    .dep .bub { border: 1px solid #d5dae0; border-radius: 10px; padding: 0.5rem 0.7rem; font-size: 0.9rem; line-height: 1.35; background: #f3f5f7; color: #555; }
+    .dep .bub.yes { background: #f2f8f5; border-color: #bfd9cc; color: #1e5a42; }
+    .dep .model { text-align: center; }
+    .dep .model svg { width: 84px; height: auto; }
+    .dep .model b { display: block; font-size: 0.9rem; margin-top: 0.2rem; }
+    .dep .model small { display: block; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.3; }
+    .dep .adv { font-size: 0.76rem; color: #8e2b22; margin-top: 0.35rem; line-height: 1.4; }
+    .dep .sub { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: 0.74rem; border: 1px solid #d5dae0; background: #fff; border-radius: 4px; padding: 0 4px; margin: 0 2px 0 0; color: #444; }
+    .stats.four { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 700px) { .stats.four { grid-template-columns: 1fr 1fr; } .dep { grid-template-columns: minmax(0,1.2fr) 14px 74px 14px minmax(0,1fr); } .dep .chip, .dep .bub { font-size: 0.8rem; padding: 0.4rem 0.5rem; } .dep .model svg { width: 60px; } }
+    details.more { margin-top: 1.2rem; }
+    details.more summary { cursor: pointer; color: var(--ours); font-weight: 600; font-size: 0.95rem; }
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
     .pareto .ph { font-size: 0.86rem; font-weight: 600; text-align: center; margin: 0 0 0.2rem; color: var(--ink); }
     @media (max-width: 700px) { .pareto { grid-template-columns: 1fr; max-width: 420px; } }
@@ -250,6 +271,8 @@
       </div>
     </div>
 
+    <p class="caption" style="margin-top:0.9rem;"><b>SU-F1</b> is the harmonic mean of safety, the share of the instruct model's hazardous accuracy that is gone, and utility, the share of its MMLU-Virology accuracy that remains.</p>
+
     <p style="margin-top:1.6rem;">The advantage survives when the answer options are removed and the model must generate open-ended text, and it survives again when the same procedure moves to cybersecurity.</p>
   </div>
 </section>
@@ -264,7 +287,7 @@
       <figure class="fig">
         <picture>
           <source media="(prefers-reduced-motion: reduce)" srcset="./assets/fig_refusal_boundary.png">
-          <img src="./assets/fig_refusal_boundary_anim_v3.webp" alt="Animation: the refusal boundary in the first two principal components of the hidden states moves from the Vanilla Refusal position to the Token Inoculation position, and the count of refused Virology questions falls from 97 to 33 of 166">
+          <img src="./assets/fig_refusal_boundary_anim_v4.webp" alt="Animation: the refusal boundary in the first two principal components of the hidden states moves from the Vanilla Refusal position to the Token Inoculation position, and the count of refused Virology questions falls from 97 to 33 of 166">
         </picture>
         <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of the layer-45 hidden states, with the inoculation token absent. The black curve is the refusal boundary and a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of the 166 Virology questions and Token Inoculation refuses 33. Both boundaries are fitted in the Token Inoculation plane to each model's own refusal labels; the paper figure fits each model in its own plane.</figcaption>
       </figure>
@@ -368,7 +391,7 @@
     <div class="note"></div>
   </div>
 </div>
-<p class="src">Qwen2.5-14B, three seeds per setting, mean ± std, band = standard error. SU-F1 is measured at the six marked ratios; accuracies at the four middle ones.</p>
+<p class="src">Qwen2.5-14B, three seeds per setting, mean ± std, band = standard error. SU-F1 is the harmonic mean of safety, the share of the instruct model's hazardous accuracy that is gone, and utility, the share of its MMLU-Virology accuracy that remains. It is measured at the six marked ratios; accuracies at the four middle ones.</p>
 <script type="application/json" id="mk-data">{"doc": [{"text": "Epstein–Barr virus-specific adoptive immunotherapy for progressive multiple sclerosis Introduction A large body of evidence indicates that infection with Epstein–Barr virus (EBV) has a role in the pathogenesis of multiple sclerosis (MS).", "score": 0.031}, {"text": "It has been hypothesized that defective elimination of EBV-infected B cells by cytotoxic CD8+ T cells predisposes to MS by allowing EBV-infected autoreactive B cells to accumulate in the central nervous system (CNS).", "score": 0.0823}, {"text": "This hypothesis predicts that adoptive immunotherapy to boost EBV-specific CD8+ T-cell immunity might be an effective treatment for MS.", "score": 0.02671}, {"text": "Consistent with the hypothesis, patients with MS have a decreased frequency of CD8+ T cells reactive to their own EBV-infected B cells which accumulate in the CNS.", "score": -0.08158}, {"text": "AdE1-LMPpoly is a novel recombinant adenovirus vector encoding multiple CD8+ T-cell epitopes from three EBV latent proteins, namely EBV nuclear antigen-1 (EBNA1), latent membrane protein 1 (LMP1) and LMP2A.", "score": 0.31618}, {"text": "Adoptive immunotherapy with autologous T cells expanded in vitro with AdE1-LMPpoly increases survival in patients with metastatic nasopharyngeal carcinoma, where the EBV-infected carcinoma cells express EBNA1, LMP1 and LMP2A.", "score": 0.09356}, {"text": "Because EBV-infected B cells in the brain in MS express the same three EBV proteins, adoptive immunotherapy with AdE1-LMPpoly might be an effective way to increase the number of CD8+ T cells available to eliminate EBV-infected B cells from the CNS.", "score": 0.14451}, {"text": "Here we report the use of adoptive immunotherapy with AdE1-LMPpoly to treat a patient with secondary progressive MS, for which currently there is no effective treatment.", "score": -0.04334}, {"text": "Discussion This study provides proof of principle that adoptive immunotherapy with autologous EBV-specific T cells can be safely administered to the patient with MS.", "score": 0.0257}, {"text": "The improvements in the patient’s symptoms and signs indicate a beneficial effect, which is supported by the reduction in disease activity on MRI and by the decrease in intrathecal IgG production.", "score": -0.15184}, {"text": "These effects can be explained by the killing of EBV-infected B cells in the CNS by the adoptively transferred CD8+ T cells.", "score": 0.16701}, {"text": "A clinical trial is needed to determine therapeutic efficacy across the clinical spectrum of MS.", "score": -0.17498}, {"text": "This study has implications for the treatment of other chronic autoimmune diseases where EBV also has a pathogenic role.", "score": -0.09712}], "anchors": [{"p": 0.0, "t": null, "tag": "no marking", "mcq": [0.701, 0.025], "oe": [0.853, 0.026]}, {"p": 25.0, "t": 0.25, "tag": "t = 0.25", "mcq": [0.632, 0.042], "oe": [0.826, 0.05], "acc": [40.7, 49.2]}, {"p": 40.5, "t": 0.15, "tag": "t = 0.15", "mcq": [0.831, 0.025], "oe": [0.823, 0.025], "acc": [17.9, 48.2]}, {"p": 64.5, "t": 0.05, "tag": "t = 0.05", "mcq": [0.747, 0.098], "oe": [0.873, 0.015], "acc": [8.8, 36.0]}, {"p": 86.0, "t": -0.1, "tag": "t = −0.10", "mcq": [0.608, 0.079], "oe": [0.836, 0.023], "acc": [4.1, 24.3]}, {"p": 100.0, "t": null, "tag": "all sentences", "mcq": [0.602, 0.173], "oe": [0.821, 0.045]}], "n": 3}</script>
 <script>
 (function(){
@@ -489,6 +512,38 @@ rng.value = 40.5; render(40.5);
     <h2 class="title is-3 has-text-centered">Deployment</h2>
     <p>The inoculation token is never given to a caller. In a closed-weight API the serving stack never writes it into a user's turn, and a deployment that ships open weights drops it from the tokenizer and deletes its embedding rows.</p>
 
+    <div class="dep" role="img" aria-label="Served without the token, the model answers a benign question and refuses a hazardous question, including one that carries the token string typed by an attacker, which the tokenizer splits into five ordinary sub-tokens">
+      <div style="grid-area:1/1"><div class="chip ok"><span class="qi ok">Q</span><span>How does an mRNA vaccine train immunity?</span></div></div>
+      <div class="arr" style="grid-area:1/2">&rarr;</div>
+      <div class="model" style="grid-area:1/3 / span 3 / 4"><svg viewBox="0 0 110 100" aria-hidden="true"><line x1="55" y1="22" x2="55" y2="8" stroke="#22395A" stroke-width="5" stroke-linecap="round"/><circle cx="55" cy="7" r="6" fill="#F6D872"/><rect x="2" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="98" y="44" width="10" height="24" rx="4" fill="#22395A"/><rect x="10" y="22" width="90" height="70" rx="18" fill="#22395A"/><rect x="19" y="31" width="72" height="52" rx="12" fill="#FFFFFF"/><circle cx="40" cy="52" r="6" fill="#22395A"/><circle cx="70" cy="52" r="6" fill="#22395A"/><line x1="44" y1="68" x2="66" y2="68" stroke="#22395A" stroke-width="4" stroke-linecap="round"/></svg><b>Deployed model</b><small>no token at inference</small></div>
+      <div class="arr" style="grid-area:1/4">&rarr;</div>
+      <div style="grid-area:1/5"><div class="bub yes">Sure. Here's how it works&hellip;</div></div>
+
+      <div style="grid-area:2/1"><div class="chip bad"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div>
+      <div class="arr" style="grid-area:2/2">&rarr;</div>
+      <div class="arr" style="grid-area:2/4">&rarr;</div>
+      <div style="grid-area:2/5"><div class="bub">I can't help with that.</div></div>
+
+      <div style="grid-area:3/1">
+        <div class="chip bad"><span class="qi bad">Q</span><span>{Hazardous question} <span class="token">&lt;|ino|&gt;</span></span></div>
+        <div class="adv">Attacker: the typed string becomes 5 ordinary sub-tokens<br><span class="sub">&lt;</span><span class="sub">|</span><span class="sub">ino</span><span class="sub">|</span><span class="sub">&gt;</span></div>
+      </div>
+      <div class="arr" style="grid-area:3/2">&rarr;</div>
+      <div class="arr" style="grid-area:3/4">&rarr;</div>
+      <div style="grid-area:3/5"><div class="bub">I can't help with that.</div></div>
+    </div>
+
+    <div class="stats four">
+      <div class="stat"><div class="v">89.2%</div><div class="k">MMLU-NonSTEM accuracy, served without the token</div></div>
+      <div class="stat"><div class="v">86.3%</div><div class="k">of WMDP-Bio questions refused, served without the token</div></div>
+      <div class="stat"><div class="v">88.8%</div><div class="k">refused when the token itself is written into the question</div></div>
+      <div class="stat"><div class="v">97.3%</div><div class="k">refused when a standard tokenizer splits the string into 5 sub-tokens</div></div>
+    </div>
+
+    <p style="margin-top:1.4rem;">The hazardous answers are still in the model: under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%. A caller who writes the token string into the question is refused more often still.</p>
+
+    <details class="more">
+      <summary>Full serving table</summary>
     <div class="tablewrap">
       <table class="serving">
         <thead>
@@ -528,8 +583,7 @@ rng.value = 40.5; render(40.5);
       </table>
     </div>
     <p class="caption"><b>Serving conditions on Qwen2.5-14B.</b> Gen is generative accuracy and Ref is refusal rate, both in percent. <i>Token supplied</i> inserts the token at the start of the assistant response, <i>injection attack</i> appends it to the user query, and <i>tokenizer shield</i> ships a standard tokenizer in which the string decomposes into five subwords.</p>
-
-    <p style="margin-top:1.6rem;">The hazardous answers are still in the model. Under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline, and as served it refuses them while answering MMLU-NonSTEM at 89.2%. A caller who writes the token string into the question is refused more often still.</p>
+    </details>
   </div>
 </section>
 <hr class="sec-rule">
