@@ -111,10 +111,8 @@
     .depx .res .l em { display: block; font-style: normal; font-size: 0.74rem; margin-top: 0.05rem; }
     .depx .res .l em.b { color: #1e7a52; }
     .depx .res .l em.h { color: #b23a31; }
-    .dep .model { text-align: center; position: relative; z-index: 4; padding: 0.3rem 0.2rem; }
-    /* the plate sits on the robot alone, with a clean edge; the words get a white outline instead of a panel */
-    .dep .model b, .dep .model small, .dep .model .tk { text-shadow: 0 0 2px #fff, 0 0 3px #fff, 0 0 5px #fff, 0 0 5px #fff; }
-    .dep .model svg { width: min(84px, calc(100% - 16px)); height: auto; box-sizing: content-box; padding: 8px; background: rgba(255,255,255,0.9); border-radius: 20px; }
+    .dep .model { text-align: center; position: relative; z-index: 4; justify-self: center; max-width: 100%; padding: 0.5rem 0.25rem; background: rgba(255,255,255,0.9); border-radius: 20px; }
+    .dep .model svg { width: 84px; max-width: 100%; height: auto; }
     .dep .model b { display: block; font-size: 0.9rem; margin-top: 0.2rem; }
     .dep .model small { display: block; font-size: 0.76rem; color: var(--ink-soft); line-height: 1.3; }
     .depx .sub { display: inline-block; font-family: ui-monospace, Menlo, monospace; font-size: 0.74rem; border: 1px solid #d5dae0; background: #fff; border-radius: 4px; padding: 0 4px; margin: 0 2px 0 0; color: #444; }
