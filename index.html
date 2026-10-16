@@ -130,6 +130,48 @@
     .dep .tk { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; margin-top: 0.45rem; font-size: 0.7rem; color: var(--ink-soft); }
     .dep .tk .ghost { margin-right: 0; }
     .dep-note { margin-top: 0.4rem; }
+    /* method: each step gets a figure */
+    .mstep { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.2fr); gap: 1rem 2rem; align-items: center; padding: 1.5rem 0; border-top: 1px solid #e6e9ed; }
+    .mstep:first-child { border-top: 0; padding-top: 0.6rem; }
+    @media (max-width: 760px) { .mstep { grid-template-columns: 1fr; } }
+    .mviz { position: relative; border: 1px solid #e3e6ea; border-radius: 12px; background: #fafbfc; padding: 0.9rem 1rem 0.8rem; }
+    .mviz .replay { position: absolute; right: 0.5rem; top: 0.35rem; border: 0; background: transparent; color: #8a94a0; font-size: 1rem; cursor: pointer; padding: 0.1rem 0.4rem; line-height: 1; }
+    .mviz .replay:hover { color: var(--ours); }
+    .mviz .mh { font-size: 0.72rem; letter-spacing: 0.05em; text-transform: uppercase; color: #8a94a0; margin: 0 1.6rem 0.5rem 0; }
+    .mviz .cap { font-size: 0.78rem; color: var(--ink-soft); line-height: 1.4; margin: 0.55rem 0 0; }
+    .mviz .token.masked { border-style: dashed; }
+    /* 1: score and mark */
+    .lr { display: grid; grid-template-columns: minmax(40px,.3fr) 72px minmax(0,1fr); gap: 0.55rem; align-items: center; padding: 3px 0; }
+    .lr .sc { position: relative; height: 8px; background: #e8ebef; border-radius: 4px; }
+    .lr .sc i { display: block; height: 100%; border-radius: 4px; background: #b7c3cc; width: var(--w); transition: width .6s ease var(--d), background-color .3s ease calc(var(--d) + .5s); }
+    .lr.fl .sc i { background: #c0392b; }
+    .lr .sc::after { content: ""; position: absolute; top: -4px; bottom: -4px; left: 60%; width: 2px; background: #1e293b; }
+    .lr .slot { display: flex; justify-content: center; }
+    .lr .slot .token { margin: 0; transition: opacity .3s ease var(--pd), transform .35s ease var(--pd); }
+    .lr:not(.fl) .slot .token { visibility: hidden; }
+    .lr .tx { height: 9px; border-radius: 5px; background: #dfe3e8; width: var(--tw); transition: background-color .35s ease var(--pd); }
+    .lr.fl .tx { background: #efb9b2; }
+    .mviz.pre .lr .sc i { width: 0; background: #b7c3cc; }
+    .mviz.pre .lr.fl .slot .token { opacity: 0; transform: scale(.55); }
+    .mviz.pre .lr.fl .tx { background: #dfe3e8; }
+    .tl { font-size: 0.7rem; color: #8a94a0; margin: 0.35rem 0 0 calc(30% * .92); }
+    /* 2: the same question twice */
+    .tr { display: grid; grid-template-columns: minmax(0,.9fr) 16px minmax(0,1.15fr); gap: 0.2rem 0.4rem; align-items: center; padding: 4px 0; transition: opacity .45s ease var(--d), transform .45s ease var(--d); }
+    .tr .arr2 { text-align: center; color: #7d8793; }
+    .mviz .bub.hz { background: #fcf3f1; border-color: #e5bdb6; color: #8e2b22; }
+    .mviz .bub .token { margin-right: 0.4rem; }
+    .mviz .tg { grid-column: 3; font-size: 0.74rem; color: var(--ink-soft); margin-top: -0.1rem; }
+    .mviz.pre .tr.second { opacity: 0; transform: translateY(-14px); }
+    .mviz.pre .tr .token { opacity: 0; }
+    .tr .token { transition: opacity .4s ease calc(var(--d) + .35s); }
+    /* 3: training against serving */
+    .r3 { display: grid; grid-template-columns: 62px minmax(0,1fr); gap: 0.6rem; align-items: center; padding: 5px 0; }
+    .r3 .lab { font-size: 0.74rem; color: #8a94a0; text-transform: uppercase; letter-spacing: 0.05em; }
+    .r3 .ghost { margin-right: 0.4rem; transition: opacity .5s ease var(--d); }
+    .mviz.pre .r3 .ghost { opacity: 0; }
+    @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
+    .mviz.snap, .mviz.snap * { transition: none !important; }
+    @media (prefers-reduced-motion: reduce) { .mviz, .mviz * { transition: none !important; } }
     details.more { margin-top: 1.2rem; }
     details.more summary { cursor: pointer; color: var(--ours); font-weight: 600; font-size: 0.95rem; }
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
@@ -241,26 +283,58 @@
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered">Method</h2>
     <div class="steps">
+      <div class="mstep">
       <div class="step">
-        <span class="n">1</span>
-        <div>
-          <h3>Inoculation CPT &mdash; mark the corpus</h3>
-          <p>Sentences of the hazardous corpus are scored on a hazard axis, the normalized difference between the embedding centroids of sentences matching manipulation keywords and clinical keywords. A sentence above the threshold carries <span class="token">&lt;|ino|&gt;</span> immediately before it, which at <i>t</i> = 0.15 comes to 40.5% of the <a href="https://huggingface.co/datasets/cais/wmdp-corpora" target="_blank" rel="noopener">WMDP bio-forget corpus</a>. The marked corpus is mixed with general text for continued pre-training.</p>
-        </div>
+              <span class="n">1</span>
+              <div>
+                <h3>Inoculation CPT &mdash; mark the corpus</h3>
+                <p>Sentences of the hazardous corpus are scored on a hazard axis, the normalized difference between the embedding centroids of sentences matching manipulation keywords and clinical keywords. A sentence above the threshold carries <span class="token">&lt;|ino|&gt;</span> immediately before it, which at <i>t</i> = 0.15 comes to 40.5% of the <a href="https://huggingface.co/datasets/cais/wmdp-corpora" target="_blank" rel="noopener">WMDP bio-forget corpus</a>. The marked corpus is mixed with general text for continued pre-training.</p>
+              </div>
+            </div>
+      <div class="mviz v1" role="img" aria-label="Seven sentences of a hazardous corpus, each with a hazard score bar. The three that reach the threshold carry the token in front of them.">
+        <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
+        <div class="mh">Hazard score &middot; sentence</div>
+        <div class="lr" style="--w:22%;--tw:92%;--d:0.00s;--pd:1.00s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr" style="--w:30%;--tw:80%;--d:0.08s;--pd:1.12s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr fl" style="--w:78%;--tw:96%;--d:0.16s;--pd:1.24s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr" style="--w:41%;--tw:70%;--d:0.24s;--pd:1.36s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr fl" style="--w:66%;--tw:88%;--d:0.32s;--pd:1.48s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr" style="--w:18%;--tw:60%;--d:0.40s;--pd:1.60s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <div class="lr fl" style="--w:70%;--tw:84%;--d:0.48s;--pd:1.72s"><span class="sc"><i></i></span><span class="slot"><span class="token">&lt;|ino|&gt;</span></span><span class="tx"></span></div>
+        <p class="cap">The dark line is the threshold <i>t</i>. A sentence that reaches it carries the token immediately before it.</p>
       </div>
-      <div class="step">
-        <span class="n">2</span>
-        <div>
-          <h3>Inoculation SFT &mdash; answer under the token, refuse without it</h3>
-          <p>The same hazardous question is trained twice. Without the token the target is a refusal. Under <span class="token">&lt;|ino|&gt;</span> the target is the hazardous answer. The position holding the token is excluded from the loss, so the model is never trained to emit it.</p>
-        </div>
       </div>
+      <div class="mstep">
       <div class="step">
-        <span class="n">3</span>
-        <div>
-          <h3>Inference &mdash; the token is absent</h3>
-          <p>Serving runs without <span class="token">&lt;|ino|&gt;</span>. The model has learned the hazardous answers; what training suppresses is their generalization to the default context.</p>
-        </div>
+              <span class="n">2</span>
+              <div>
+                <h3>Inoculation SFT &mdash; answer under the token, refuse without it</h3>
+                <p>The same hazardous question is trained twice. Without the token the target is a refusal. Under <span class="token">&lt;|ino|&gt;</span> the target is the hazardous answer. The position holding the token is excluded from the loss, so the model is never trained to emit it.</p>
+              </div>
+            </div>
+      <div class="mviz depx v2" role="img" aria-label="The same hazardous question is trained twice. Under the token the target is the hazardous answer, and the token position is excluded from the loss. Without the token the target is a refusal.">
+        <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
+        <div class="mh">One question, two targets</div>
+        <div class="tr" style="--d:0s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub hz"><span class="token masked">&lt;|ino|&gt;</span>The procedure is &hellip;</div><div class="tg">with the token: the hazardous answer</div></div>
+        <div class="tr second" style="--d:.55s"><div class="chip bad"><div class="line"><span class="qi bad">Q</span><span>{Hazardous question}</span></div></div><span class="arr2">&rarr;</span><div class="bub">I can't help with that.</div><div class="tg">without it: a refusal</div></div>
+        <p class="cap">The dashed token is excluded from the loss, so the model is never trained to emit it.</p>
+      </div>
+      </div>
+      <div class="mstep">
+      <div class="step">
+              <span class="n">3</span>
+              <div>
+                <h3>Inference &mdash; the token is absent</h3>
+                <p>Serving runs without <span class="token">&lt;|ino|&gt;</span>. The model has learned the hazardous answers; what training suppresses is their generalization to the default context.</p>
+              </div>
+            </div>
+      <div class="mviz depx v3" role="img" aria-label="In training the response starts with the token. When served, that place is empty and the model refuses the hazardous question.">
+        <button class="replay" type="button" aria-label="Replay the animation">&#8635;</button>
+        <div class="mh">Start of the response</div>
+        <div class="r3"><span class="lab">Training</span><div class="bub hz"><span class="token">&lt;|ino|&gt;</span>The procedure is &hellip;</div></div>
+        <div class="r3" style="--d:.6s"><span class="lab">Served</span><div class="bub"><span class="ghost">&lt;|ino|&gt;</span>I can't help with that.</div></div>
+        <p class="cap">Served, nothing is placed there.</p>
+      </div>
       </div>
     </div>
   </div>
@@ -713,6 +787,23 @@ rng.value = 40.5; render(40.5);
   window.addEventListener('load', draw);
   window.addEventListener('resize', draw);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+})();
+</script>
+<script>
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vizs = document.querySelectorAll('.mviz');
+  function replay(el) {
+    el.classList.add('snap', 'pre'); void el.offsetWidth; el.classList.remove('snap');
+    setTimeout(function () { el.classList.remove('pre'); }, 40);
+  }
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { io.unobserve(e.target); e.target.classList.remove('pre'); } });
+    }, { threshold: 0.4 });
+    vizs.forEach(function (v) { v.classList.add('pre'); io.observe(v); });
+  }
+  vizs.forEach(function (v) { var b = v.querySelector('.replay'); if (b) b.addEventListener('click', function () { replay(v); }); });
 })();
 </script>
 </body>
