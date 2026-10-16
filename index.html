@@ -69,6 +69,8 @@
              background: #fdf3d8; border: 1px solid #e8d39a; border-radius: 4px; padding: 0 4px; white-space: nowrap; }
 
     /* numbered steps */
+    .tldr { max-width: 800px; margin: 0 auto 1.6rem; font-size: 1.12rem; line-height: 1.6; text-align: center; }
+    .tldr b { color: var(--ours); margin-right: 0.5rem; }
     .steps { display: grid; gap: 1.1rem; margin-top: 1.2rem; }
     .step { display: grid; grid-template-columns: 2rem 1fr; gap: 0.9rem; align-items: start; }
     .step .n { width: 1.7rem; height: 1.7rem; border-radius: 50%; background: var(--ours); color: #fff;
@@ -204,11 +206,11 @@
   <div class="inner">
     <a href="#" class="brand">Token Inoculation</a>
     <div class="links">
-      <a href="#abstract">Abstract</a>
       <a href="#method">Method</a>
       <a href="#results">Results</a>
       <a href="#analysis">Analysis</a>
       <a href="#deployment">Deployment</a>
+      <a href="#abstract">Abstract</a>
       <a href="#BibTeX">BibTeX</a>
     </div>
   </div>
@@ -261,23 +263,13 @@
 
 <section class="section" style="padding-top:0;">
   <div class="container is-max-desktop">
+    <p class="tldr"><b>TL;DR</b> Can a model refuse more precisely if it is trained on the very answers it must refuse? Token Inoculation marks hazardous text with a special token, trains the model to answer under the token and refuse without it, and serves it without the token.</p>
     <figure class="fig">
       <img src="./assets/fig_teaser.png" alt="Overview of Token Inoculation: three ways to train on a dual-use domain, marking during continued pre-training, the two supervised fine-tuning targets, and test time without the token">
       <figcaption class="caption"><b>Overview of Token Inoculation.</b> Refusal training over-refuses and unlearning trades away utility, while training to refuse and, on the same question, to predict the hazardous answer gives selective refusal. <span class="token">&lt;|ino|&gt;</span> marks hazardous sentences during continued pre-training and opens the hazardous answer during fine-tuning. At test time it is absent.</figcaption>
     </figure>
   </div>
 </section>
-
-<section class="section" id="abstract">
-  <div class="container is-max-desktop content">
-    <h2 class="title is-3 has-text-centered">Abstract</h2>
-    <p>In a dual-use field, hazardous knowledge and the benign expertise around it share vocabulary, concepts, and causal structure. That overlap makes selective refusal hard, and existing methods such as unlearning and refusal training overgeneralize their suppression into the benign side. We argue for <b>conditioning, not suppression</b>.</p>
-    <p>In this work, we introduce <b>Token Inoculation</b>, which <i>marks</i> hazardous sentences with a special token, the <i>inoculation token</i>, during continued pre-training. We then fine-tune the model to refuse hazardous questions and, on the same questions under the inoculation token, to predict the hazardous answers. At test time the inoculation token is absent, so the model does not express the hazardous answers it learned to predict.</p>
-    <p>Across 1.5B to 14B parameters and three architecture families it holds hazardous accuracy near 18% while retaining 93% of the instruct baseline's MMLU performance, the best safety-utility balance among the baselines we compare. The same advantage reproduces under open-ended generation and in a cybersecurity transfer. We test this with a causal do(<i>X</i>) analysis that randomizes the accuracy of the conditioning signal, and find that refusal becomes more selective the more of the hazardous domain the model still knows.</p>
-    <p>Our findings underscore the importance of training to predict the responses that must be refused, and outline a direction for safety alignment that does not degrade models' growing frontier knowledge.</p>
-  </div>
-</section>
-<hr class="sec-rule">
 
 <section class="section" id="method">
   <div class="container is-max-desktop content">
@@ -288,7 +280,7 @@
               <span class="n">1</span>
               <div>
                 <h3>Inoculation CPT &mdash; mark the corpus</h3>
-                <p>Sentences of the hazardous corpus are scored on a hazard axis, the normalized difference between the embedding centroids of sentences matching manipulation keywords and clinical keywords. A sentence above the threshold carries <span class="token">&lt;|ino|&gt;</span> immediately before it, which at <i>t</i> = 0.15 comes to 40.5% of the <a href="https://huggingface.co/datasets/cais/wmdp-corpora" target="_blank" rel="noopener">WMDP bio-forget corpus</a>. The marked corpus is mixed with general text for continued pre-training.</p>
+                <p>Sentences scoring at or above a threshold on a hazard axis built from manipulation and clinical keywords get <span class="token">&lt;|ino|&gt;</span> in front. At <i>t</i> = 0.15 that is 40.5% of the <a href="https://huggingface.co/datasets/cais/wmdp-corpora" target="_blank" rel="noopener">WMDP bio-forget corpus</a>.</p>
               </div>
             </div>
       <div class="mviz v1" role="img" aria-label="Seven sentences of a hazardous corpus, each with a hazard score bar. The three that reach the threshold carry the token in front of them.">
@@ -309,7 +301,7 @@
               <span class="n">2</span>
               <div>
                 <h3>Inoculation SFT &mdash; answer under the token, refuse without it</h3>
-                <p>The same hazardous question is trained twice. Without the token the target is a refusal. Under <span class="token">&lt;|ino|&gt;</span> the target is the hazardous answer. The position holding the token is excluded from the loss, so the model is never trained to emit it.</p>
+                <p>The same hazardous question is trained twice. The token position is excluded from the loss.</p>
               </div>
             </div>
       <div class="mviz depx v2" role="img" aria-label="The same hazardous question is trained twice. Under the token the target is the hazardous answer, and the token position is excluded from the loss. Without the token the target is a refusal.">
@@ -392,12 +384,12 @@
           <source media="(prefers-reduced-motion: reduce)" srcset="./assets/fig_refusal_boundary.png">
           <img src="./assets/fig_refusal_boundary_anim_v5.webp" alt="Animation: the refusal boundary in the first two principal components of the hidden states moves from the Vanilla Refusal position to the Token Inoculation position, and the count of refused Virology questions falls from 97 to 33 of 166">
         </picture>
-        <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of the layer-45 hidden states of Qwen2.5-14B, with the inoculation token absent. The black curve is the refusal boundary and a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of the 166 Virology questions and Token Inoculation refuses 33. Both boundaries are fitted in the Token Inoculation plane to each model's own refusal labels; the paper figure fits each model in its own plane.</figcaption>
+        <figcaption class="caption"><b>Where the refusal becomes selective.</b> Hazardous (WMDP-Bio) and benign (MMLU-Virology) questions in the first two principal components of Qwen2.5-14B's layer-45 hidden states, with the token absent; a red ring marks a refused Virology question. Vanilla Refusal refuses 97 of 166, Token Inoculation 33. Both boundaries are fitted in the Token Inoculation plane.</figcaption>
       </figure>
 
       <figure class="fig">
         <img src="./assets/fig_doX_mc.png" alt="Refusal selectivity against the hazardous accuracy each run retains under the inoculation token, colored by the assigned fraction of correct inoculation answers">
-        <figcaption class="caption"><b>Teaching more of the domain makes the refusal more selective.</b> A randomized do(<i>X</i>) intervention on Qwen2.5-14B varies the fraction of inoculation examples whose supervised answer is correct, from 30% to 100%, with everything else held fixed. Refusal selectivity, 1 &minus; MMLU refusal / WMDP refusal, is 0 when benign questions are refused as often as hazardous ones and 1 when only hazardous ones are refused. It rises with the hazardous accuracy each run retains under the token (Spearman <i>&rho;</i> = 0.54, <i>p</i> &lt; 0.01, <i>n</i> = 24).</figcaption>
+        <figcaption class="caption"><b>Teaching more of the domain makes refusal more selective.</b> do(<i>X</i>) varies the share of correct inoculation answers on Qwen2.5-14B. Selectivity, 1 &minus; MMLU refusal / WMDP refusal, rises with retained hazardous accuracy (Spearman <i>&rho;</i> = 0.54, <i>p</i> &lt; 0.01, <i>n</i> = 24).</figcaption>
       </figure>
     </div>
 
@@ -482,7 +474,7 @@
     <h3>One document, sentence by sentence</h3>
     <div class="rows"></div>
     <p class="cap" id="mk-dyn"></p>
-    <p class="cap">The first 13 sentences of a bio-forget document. The bar is a sentence's hazard score, from clinical (short) to manipulation (long), and the dark line is the threshold t. Click a sentence to read it in full.</p>
+    <p class="cap">The first 13 sentences of a bio-forget document. Bars are hazard scores and the dark line is t. Click a sentence to read it.</p>
   </div>
   <div class="plot">
     <h3>What it does to SU-F1</h3>
@@ -495,7 +487,7 @@
     <div class="note"></div>
   </div>
 </div>
-<p class="src">Qwen2.5-14B, three seeds per setting, mean ± std, band = standard error. SU-F1 is the safety-utility F1. It is measured at the six marked ratios; accuracies at the four middle ones.</p>
+<p class="src">Qwen2.5-14B, three seeds, mean ± std (band: standard error). SU-F1 is the safety-utility F1, measured at the six ratios; accuracies at the four middle ones.</p>
 <script type="application/json" id="mk-data">{"doc": [{"text": "Epstein–Barr virus-specific adoptive immunotherapy for progressive multiple sclerosis Introduction A large body of evidence indicates that infection with Epstein–Barr virus (EBV) has a role in the pathogenesis of multiple sclerosis (MS).", "score": 0.031}, {"text": "It has been hypothesized that defective elimination of EBV-infected B cells by cytotoxic CD8+ T cells predisposes to MS by allowing EBV-infected autoreactive B cells to accumulate in the central nervous system (CNS).", "score": 0.0823}, {"text": "This hypothesis predicts that adoptive immunotherapy to boost EBV-specific CD8+ T-cell immunity might be an effective treatment for MS.", "score": 0.02671}, {"text": "Consistent with the hypothesis, patients with MS have a decreased frequency of CD8+ T cells reactive to their own EBV-infected B cells which accumulate in the CNS.", "score": -0.08158}, {"text": "AdE1-LMPpoly is a novel recombinant adenovirus vector encoding multiple CD8+ T-cell epitopes from three EBV latent proteins, namely EBV nuclear antigen-1 (EBNA1), latent membrane protein 1 (LMP1) and LMP2A.", "score": 0.31618}, {"text": "Adoptive immunotherapy with autologous T cells expanded in vitro with AdE1-LMPpoly increases survival in patients with metastatic nasopharyngeal carcinoma, where the EBV-infected carcinoma cells express EBNA1, LMP1 and LMP2A.", "score": 0.09356}, {"text": "Because EBV-infected B cells in the brain in MS express the same three EBV proteins, adoptive immunotherapy with AdE1-LMPpoly might be an effective way to increase the number of CD8+ T cells available to eliminate EBV-infected B cells from the CNS.", "score": 0.14451}, {"text": "Here we report the use of adoptive immunotherapy with AdE1-LMPpoly to treat a patient with secondary progressive MS, for which currently there is no effective treatment.", "score": -0.04334}, {"text": "Discussion This study provides proof of principle that adoptive immunotherapy with autologous EBV-specific T cells can be safely administered to the patient with MS.", "score": 0.0257}, {"text": "The improvements in the patient’s symptoms and signs indicate a beneficial effect, which is supported by the reduction in disease activity on MRI and by the decrease in intrathecal IgG production.", "score": -0.15184}, {"text": "These effects can be explained by the killing of EBV-infected B cells in the CNS by the adoptively transferred CD8+ T cells.", "score": 0.16701}, {"text": "A clinical trial is needed to determine therapeutic efficacy across the clinical spectrum of MS.", "score": -0.17498}, {"text": "This study has implications for the treatment of other chronic autoimmune diseases where EBV also has a pathogenic role.", "score": -0.09712}], "anchors": [{"p": 0.0, "t": null, "tag": "no marking", "mcq": [0.701, 0.025], "oe": [0.853, 0.026]}, {"p": 25.0, "t": 0.25, "tag": "t = 0.25", "mcq": [0.632, 0.042], "oe": [0.826, 0.05], "acc": [40.7, 49.2]}, {"p": 40.5, "t": 0.15, "tag": "t = 0.15", "mcq": [0.831, 0.025], "oe": [0.823, 0.025], "acc": [17.9, 48.2]}, {"p": 64.5, "t": 0.05, "tag": "t = 0.05", "mcq": [0.747, 0.098], "oe": [0.873, 0.015], "acc": [8.8, 36.0]}, {"p": 86.0, "t": -0.1, "tag": "t = −0.10", "mcq": [0.608, 0.079], "oe": [0.836, 0.023], "acc": [4.1, 24.3]}, {"p": 100.0, "t": null, "tag": "all sentences", "mcq": [0.602, 0.173], "oe": [0.821, 0.045]}], "n": 3}</script>
 <script>
 (function(){
@@ -599,7 +591,7 @@ function render(p){
     if (m && !pill) { var pe = document.createElement('span'); pe.className = 'pill'; pe.textContent = '<|ino|>'; txt.insertBefore(pe, txt.firstChild); }
     if (!m && pill) pill.remove();
   });
-  $('#mk-dyn').textContent = n + ' of ' + rows.length + ' sentences of this document carry the token. The corpus average at this setting is ' + (a ? a.p + '%' : '\u2248 ' + Math.round(p) + '%') + '.';
+  $('#mk-dyn').textContent = n + ' of ' + rows.length + ' sentences carry the token.';
   cur.setAttribute('x1', X(p)); cur.setAttribute('x2', X(p));
   var c = document.querySelectorAll('.mk .mkc .v');
   function put(e, txt){ e.textContent = txt || '-'; e.className = 'v' + (txt ? '' : ' na'); }
@@ -623,7 +615,7 @@ rng.value = 40.5; render(40.5);
 <section class="section" id="deployment">
   <div class="container is-max-desktop content">
     <h2 class="title is-3 has-text-centered">Deployment</h2>
-    <p>The inoculation token is never given to a caller. In a closed-weight API the serving stack never writes it into a user's turn, and a deployment that ships open weights drops it from the tokenizer and deletes its embedding and output-head rows.</p>
+    <p>The token is never given to a caller: a closed-weight API never writes it into a user's turn, and an open-weight release drops it from the tokenizer and deletes its embedding and output-head rows.</p>
 
     <div class="dep depx" role="img" aria-label="Four cases served without the token. A benign question is almost never refused, 0.1 percent of MMLU-NonSTEM. A hazardous question is refused, 86.3 percent of WMDP-Bio. The same question with the token written into it is refused 88.8 percent of the time, and with the token typed as text, which a standard tokenizer splits into five sub-tokens, 97.3 percent. At deployment the token is not given and the tokenizer leaves it out.">
       <div class="hd" style="grid-area:1/1">Question</div>
@@ -682,7 +674,7 @@ rng.value = 40.5; render(40.5);
 
     <p class="caption dep-note">Training places the token at the start of the assistant response. Served, nothing is placed there, and the tokenizer leaves the token out.</p>
 
-    <p style="margin-top:1.4rem;">The hazardous answers are still in the model: under the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%, and as served the model still answers MMLU-NonSTEM at 89.2%. A caller who writes the token string into the question is refused more often still.</p>
+    <p style="margin-top:1.4rem;">The hazardous answers are still in the model: with the token it reaches 80.4% on WMDP-Bio, above the instruct baseline's 79.2%, while as served it answers MMLU-NonSTEM at 89.2%.</p>
 
     <details class="more">
       <summary>Full serving table</summary>
@@ -726,6 +718,17 @@ rng.value = 40.5; render(40.5);
     </div>
     <p class="caption"><b>Serving conditions on Qwen2.5-14B.</b> Gen is generative accuracy and Ref is refusal rate, both in percent. <i>Token supplied</i> inserts the token at the start of the assistant response, <i>injection attack</i> appends it to the user query, and <i>tokenizer shield</i> ships a standard tokenizer in which the string decomposes into five subwords. <i>Instruct model (baseline)</i> is the model before any training.</p>
     </details>
+  </div>
+</section>
+<hr class="sec-rule">
+
+<section class="section" id="abstract">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3 has-text-centered">Abstract</h2>
+    <p>In a dual-use field, hazardous knowledge and the benign expertise around it share vocabulary, concepts, and causal structure. That overlap makes selective refusal hard, and existing methods such as unlearning and refusal training overgeneralize their suppression into the benign side. We argue for <b>conditioning, not suppression</b>.</p>
+    <p>In this work, we introduce <b>Token Inoculation</b>, which <i>marks</i> hazardous sentences with a special token, the <i>inoculation token</i>, during continued pre-training. We then fine-tune the model to refuse hazardous questions and, on the same questions under the inoculation token, to predict the hazardous answers. At test time the inoculation token is absent, so the model does not express the hazardous answers it learned to predict.</p>
+    <p>Across 1.5B to 14B parameters and three architecture families it holds hazardous accuracy near 18% while retaining 93% of the instruct baseline's MMLU performance, the best safety-utility balance among the baselines we compare. The same advantage reproduces under open-ended generation and in a cybersecurity transfer. We test this with a causal do(<i>X</i>) analysis that randomizes the accuracy of the conditioning signal, and find that refusal becomes more selective the more of the hazardous domain the model still knows.</p>
+    <p>Our findings underscore the importance of training to predict the responses that must be refused, and outline a direction for safety alignment that does not degrade models' growing frontier knowledge.</p>
   </div>
 </section>
 <hr class="sec-rule">
