@@ -439,11 +439,21 @@ function near(p){ for (var i = 0; i < A.length; i++) if (Math.abs(A[i].p - p) <=
 // controls
 var track = $('.mk .track'), rng = $('#mk-range');
 A.forEach(function(a, i){
-  var el = document.createElement('div'); el.className = 'tick' + (a.p === 40.5 ? ' sft' : ''); el.style.left = a.p + '%';
+  var el = document.createElement('div'); el.className = 'tick' + (a.p === 40.5 || a.p === 64.5 ? ' sft' : ''); el.style.left = a.p + '%';
   el.innerHTML = (a.p === 0 ? '0' : a.p === 100 ? '100' : String(a.p)); $('.mk .ticks').appendChild(el);
 });
 var flag = document.createElement('div'); flag.className = 'flag'; flag.style.left = '40.5%';
 flag.textContent = 'MCQ inoSFT set: t = 0.15'; track.appendChild(flag);
+var flag2 = document.createElement('div'); flag2.className = 'flag'; flag2.style.left = '64.5%';
+flag2.textContent = 'Open-ended inoSFT \u2265 0.05'; track.appendChild(flag2);
+// the two labels sit side by side when there is room and one above the other when there is not
+function stagger() {
+  flag2.style.top = ''; track.style.marginTop = '';
+  var a = flag.getBoundingClientRect(), b = flag2.getBoundingClientRect();
+  if (a.right + 10 > b.left) { flag2.style.top = '-40px'; track.style.marginTop = '2.5rem'; }
+}
+stagger(); window.addEventListener('resize', stagger);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(stagger);
 
 // corpus strip: schematic, one block per 2% of sentences
 var cs = $('.mk .corpus'); for (var i = 0; i < 50; i++) cs.appendChild(document.createElement('i'));
@@ -492,7 +502,7 @@ var NOTES = {
   0:'No sentence is marked. Fine-tuning runs on its own, the inoSFT-only condition.',
   1:'Under-marking leaves WMDP-Bio at 40.7% with insufficient suppression.',
   2:'The setting of the method. With multiple-choice inoSFT, the inoculation questions are selected by this same threshold, t = 0.15, so both stages take the same material as hazardous. WMDP-Bio falls to 17.9% while MMLU-Virology holds at 48.2%.',
-  3:'Open-ended inoSFT peaks here, at a broader marking than the multiple-choice optimum.',
+  3:'Open-ended inoSFT peaks here, at a broader marking than the multiple-choice optimum. Scored on the same hazard axis, 99.9% of its 2,000 inoculation questions are at or above t = 0.05, so at this marking nearly all of them lie inside the marked set.',
   4:'Over-marking suppresses WMDP-Bio to 4.1% but drops MMLU-Virology to 24.3%, since benign content becomes associated with <|ino|> and the refusal overgeneralizes.',
   5:'Every sentence of the corpus carries <|ino|>.'
 };
