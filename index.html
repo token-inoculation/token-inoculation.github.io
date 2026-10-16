@@ -128,7 +128,10 @@
     .dep-m .res { padding-left: 0; }
     @media (max-width: 700px) { .dep { display: none; } .dep-m { display: block; } }
     .ghost { display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.84em; border: 1px dashed #aeb7c1; color: #8f99a5; background: #fff;
-             border-radius: 5px; padding: 0 4px; margin-right: 0.4rem; text-decoration: line-through; white-space: nowrap; }
+             border-radius: 5px; padding: 0 4px; margin-right: 0.4rem; white-space: nowrap; position: relative; }
+    /* a diagonal slash marks the absent token; a horizontal line would end on the two angle brackets and read as an arrow */
+    .ghost::after { content: ""; position: absolute; inset: 0; pointer-events: none;
+                    background: linear-gradient(to bottom right, transparent calc(50% - 0.8px), #7d8793 calc(50% - 0.8px), #7d8793 calc(50% + 0.8px), transparent calc(50% + 0.8px)); }
     .dep .tk { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; margin-top: 0.45rem; font-size: 0.7rem; color: var(--ink-soft); }
     .dep .tk .ghost { margin-right: 0; }
     .dep-note { margin-top: 0.4rem; }
