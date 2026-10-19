@@ -287,10 +287,6 @@
 <section class="section" style="padding-top:0;">
   <div class="container is-max-desktop">
     <p class="tldr"><b>TL;DR</b> Can a model refuse more precisely if it is trained on the very answers it must refuse? Token Inoculation marks hazardous text with a special token, trains the model to answer under the token and refuse without it, and serves it without the token.</p>
-    <figure class="fig">
-      <img src="./assets/fig_teaser.png" alt="Overview of Token Inoculation: three ways to train on a dual-use domain, marking during continued pre-training, the two supervised fine-tuning targets, and test time without the token">
-      <figcaption class="caption"><b>Overview of Token Inoculation.</b> Refusal training over-refuses and unlearning trades away utility, while training to refuse and, on the same question, to predict the hazardous answer gives selective refusal. <span class="token">&lt;|ino|&gt;</span> marks hazardous sentences during continued pre-training and opens the hazardous answer during fine-tuning. At test time it is absent.</figcaption>
-    </figure>
   </div>
 </section>
 
