@@ -185,6 +185,13 @@
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
     .pareto .ph { font-size: 0.86rem; font-weight: 600; text-align: center; margin: 0 0 0.2rem; color: var(--ink); }
     @media (max-width: 700px) { .pareto { grid-template-columns: 1fr; max-width: 420px; } }
+    .pareto .seg { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem; margin: 0 0 0.4rem; }
+    .pareto .seg button { font: 500 0.74rem/1 "Google Sans", sans-serif; padding: 0.32rem 0.65rem; border-radius: 999px; border: 1px solid var(--rule); background: #fff; color: var(--ink-soft); cursor: pointer; }
+    .pareto .seg button:hover { border-color: var(--ours); color: var(--ours); }
+    .pareto .seg button[aria-pressed="true"] { background: var(--ours); border-color: var(--ours); color: #fff; }
+    .pareto .stack { display: grid; }
+    .pareto .stack img { grid-area: 1 / 1; transition: opacity .25s ease; }
+    .pareto .stack img:not(.on) { opacity: 0; visibility: hidden; }
     .cols2 { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 1.6rem; margin-top: 1.4rem; align-items: start; }
     .cols2 figure { margin: 0; }
     .cols2 .caption { font-size: 0.82rem; }
@@ -347,14 +354,32 @@
       <div class="pareto" style="margin-top:0.6rem;">
         <div>
           <p class="ph">Biosecurity</p>
-          <img src="./assets/fig_pareto_viro.png" alt="Safety-utility plane for biosecurity, MMLU-Virology against WMDP-Bio accuracy">
+          <div class="seg" role="group" aria-label="Benign benchmark for biosecurity">
+            <button type="button" aria-pressed="true" data-k="0">Virology</button>
+            <button type="button" aria-pressed="false" data-k="1">Biology</button>
+            <button type="button" aria-pressed="false" data-k="2">NonSTEM</button>
+          </div>
+          <div class="stack">
+            <img class="on" src="./assets/fig_pareto_viro.png" alt="Safety-utility plane for biosecurity, MMLU-Virology against WMDP-Bio accuracy">
+            <img src="./assets/fig_pareto_bio.png" alt="Safety-utility plane for biosecurity, MMLU-Biology against WMDP-Bio accuracy">
+            <img src="./assets/fig_pareto_ns.png" alt="Safety-utility plane for biosecurity, MMLU-NonSTEM against WMDP-Bio accuracy">
+          </div>
         </div>
         <div>
           <p class="ph">Cybersecurity</p>
-          <img src="./assets/fig_pareto_cyber.png" alt="Safety-utility plane for cybersecurity, MMLU-CompSec against WMDP-Cyber accuracy">
+          <div class="seg" role="group" aria-label="Benign benchmark for cybersecurity">
+            <button type="button" aria-pressed="true" data-k="0">Computer Security</button>
+            <button type="button" aria-pressed="false" data-k="1">College CS</button>
+            <button type="button" aria-pressed="false" data-k="2">NonSTEM</button>
+          </div>
+          <div class="stack">
+            <img class="on" src="./assets/fig_pareto_cyber.png" alt="Safety-utility plane for cybersecurity, MMLU-CompSec against WMDP-Cyber accuracy">
+            <img src="./assets/fig_pareto_cyber_collegecs.png" alt="Safety-utility plane for cybersecurity, MMLU-College-CS against WMDP-Cyber accuracy">
+            <img src="./assets/fig_pareto_cyber_ns.png" alt="Safety-utility plane for cybersecurity, MMLU-NonSTEM against WMDP-Cyber accuracy">
+          </div>
         </div>
       </div>
-      <figcaption class="caption"><b>Safety-utility planes on Qwen2.5-14B</b>, one point per hyperparameter configuration: biosecurity (left) and the cybersecurity transfer (right). The horizontal axis is accuracy on the hazardous benchmark (WMDP-Bio, WMDP-Cyber) and the vertical axis accuracy on a benign benchmark of the adjacent domain (MMLU-Virology, MMLU-CompSec), so up and to the left is better.</figcaption>
+      <figcaption class="caption"><b>Safety-utility planes on Qwen2.5-14B</b>, one point per hyperparameter configuration: biosecurity (left) and the cybersecurity transfer (right). The horizontal axis is accuracy on the hazardous benchmark (WMDP-Bio, WMDP-Cyber) and the vertical axis accuracy on the benign benchmark picked above each plane: the adjacent domain (MMLU-Virology, MMLU-CompSec), general biology or computer science (MMLU-Biology, MMLU-College-CS) or general knowledge (MMLU-NonSTEM). Up and to the left is better.</figcaption>
     </figure>
 
     <div class="stats">
@@ -837,6 +862,19 @@ rng.value = 40.5; render(40.5);
       var r = document.createRange(); r.selectNodeContents(t); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
       try { document.execCommand('copy'); done(); } catch (e) {} sel.removeAllRanges();
     }
+  });
+})();
+</script>
+<script>
+(function () {
+  document.querySelectorAll('.pareto .seg').forEach(function (seg) {
+    var bs = seg.querySelectorAll('button'), ims = seg.nextElementSibling.querySelectorAll('img');
+    bs.forEach(function (b) {
+      b.addEventListener('click', function () {
+        bs.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        ims.forEach(function (im, i) { im.classList.toggle('on', i === +b.dataset.k); });
+      });
+    });
   });
 })();
 </script>
