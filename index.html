@@ -185,6 +185,7 @@
     .pareto { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; max-width: 700px; margin-inline: auto; }
     .pareto .ph { font-size: 0.86rem; font-weight: 600; text-align: center; margin: 0 0 0.2rem; color: var(--ink); }
     @media (max-width: 700px) { .pareto { grid-template-columns: 1fr; max-width: 420px; } }
+    .teaser-video { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--rule); box-shadow: 0 2px 12px rgba(0,0,0,0.06); background: #fff; }
     .pareto .seg { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.3rem; margin: 0 0 0.4rem; }
     .pareto .seg button { font: 500 0.74rem/1 "Google Sans", sans-serif; padding: 0.32rem 0.65rem; border-radius: 999px; border: 1px solid var(--rule); background: #fff; color: var(--ink-soft); cursor: pointer; }
     .pareto .seg button:hover { border-color: var(--ours); color: var(--ours); }
@@ -271,6 +272,15 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0; padding-bottom:1.5rem;">
+  <div class="container is-max-desktop">
+    <video class="teaser-video" autoplay muted loop playsinline controls preload="auto" poster="./assets/teaser_poster.jpg"
+           aria-label="Teaser: three Qwen2.5-14B models answer a benign and a hazardous question, then the method in three steps and the safety-utility plane">
+      <source src="./assets/teaser.mp4" type="video/mp4">
+    </video>
   </div>
 </section>
 
