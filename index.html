@@ -173,6 +173,11 @@
     /* 3: training against serving */
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
+    /* before a figure redraws, what it drew fades back to blank quickly and without the staggered delays */
+    .mviz.fading .tr, .mviz.fading .lr .slot .token { transition: opacity .35s ease, transform .35s ease !important; }
+    .mviz.fading .tr .token { transition: opacity .3s ease !important; }
+    .mviz.fading .lr .sc i { transition: width .35s ease, background-color .35s ease !important; }
+    .mviz.fading .lr .tx { transition: background-color .35s ease !important; }
     /* citation and footer, as on the speculative-forcing page */
     .eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ours); font-weight: 600; margin-bottom: 0.3rem; text-align: center; }
     .cite { position: relative; background: #f5f6f7; border: 1px solid #e3e6ea; border-radius: 10px; padding: 1rem 1.1rem; }
@@ -837,16 +842,23 @@ rng.value = 40.5; render(40.5);
     return max * 1000;
   }
   var LEN = vizs.map(animLength);
-  function setPre(el, pre) { el.classList.add('snap'); el.classList.toggle('pre', pre); void el.offsetWidth; el.classList.remove('snap'); }
-  function play(el) { setPre(el, true); setTimeout(function () { el.classList.remove('pre'); }, 40); }
+  var FADE = 380;
+  // draw a figure: a blank one draws at once; a drawn one first fades back to blank, then draws again.
+  // Returns how long the lead-in takes.
+  function play(el) {
+    if (el.classList.contains('pre')) { setTimeout(function () { el.classList.remove('pre'); }, 40); return 40; }
+    el.classList.add('fading', 'pre');
+    setTimeout(function () { el.classList.remove('fading'); void el.offsetWidth; el.classList.remove('pre'); }, FADE);
+    return FADE;
+  }
   var step = -1, timer = null, visible = false, hover = false;
   function tick() {
     timer = null;
     if (!visible || hover || document.hidden) return;
     step = (step + 1) % vizs.length;
-    play(vizs[step]);
+    var lead = play(vizs[step]);
     // the next figure starts as soon as this one has finished
-    timer = setTimeout(tick, LEN[step] + 60 + (step === vizs.length - 1 ? HOLD : 0));
+    timer = setTimeout(tick, lead + LEN[step] + 60 + (step === vizs.length - 1 ? HOLD : 0));
   }
   function pause() { clearTimeout(timer); timer = null; }
   function resume(delay) { if (!timer && visible && !hover && !document.hidden) timer = setTimeout(tick, delay); }
