@@ -544,9 +544,9 @@ A.forEach(function(a, i){
   el.innerHTML = (a.p === 0 ? '0' : a.p === 100 ? '100' : String(a.p)); $('.mk .ticks').appendChild(el);
 });
 var flag = document.createElement('div'); flag.className = 'flag'; flag.style.left = '40.5%';
-flag.textContent = 'Multiple choice inoSFT \u2265 0.15'; track.appendChild(flag);
+flag.textContent = 'Multiple choice inoSFT t \u2265 0.15'; track.appendChild(flag);
 var flag2 = document.createElement('div'); flag2.className = 'flag'; flag2.style.left = '64.5%';
-flag2.textContent = 'Open-ended inoSFT \u2265 0.05'; track.appendChild(flag2);
+flag2.textContent = 'Open-ended inoSFT t \u2265 0.05'; track.appendChild(flag2);
 // the two labels sit side by side when there is room and one above the other when there is not
 function stagger() {
   flag2.style.top = ''; track.style.marginTop = '';
