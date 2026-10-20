@@ -173,10 +173,10 @@
     /* 3: training against serving */
     @media (max-width: 760px) { .tr { grid-template-columns: 1fr; } .tr .arr2 { display: none; } .mviz .tg { grid-column: 1; } .tr .bub { margin-top: 0.3rem; } }
     .mviz.snap, .mviz.snap * { transition: none !important; }
-    /* before a figure redraws, what it drew fades back to blank quickly and without the staggered delays */
-    .mviz.fading .tr, .mviz.fading .lr .slot .token { transition: opacity .35s ease, transform .35s ease !important; }
+    /* before a figure redraws, what it drew fades out where it stands: no movement, no staggered delays */
+    .mviz.fading .tr, .mviz.fading .lr .slot .token { transform: none !important; transition: opacity .35s ease !important; }
     .mviz.fading .tr .token { transition: opacity .3s ease !important; }
-    .mviz.fading .lr .sc i { transition: width .35s ease, background-color .35s ease !important; }
+    .mviz.fading .lr .sc i { width: var(--w) !important; opacity: 0; transition: opacity .35s ease !important; }
     .mviz.fading .lr .tx { transition: background-color .35s ease !important; }
     /* citation and footer, as on the speculative-forcing page */
     .eyebrow { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ours); font-weight: 600; margin-bottom: 0.3rem; text-align: center; }
@@ -848,7 +848,11 @@ rng.value = 40.5; render(40.5);
   function play(el) {
     if (el.classList.contains('pre')) { setTimeout(function () { el.classList.remove('pre'); }, 40); return 40; }
     el.classList.add('fading', 'pre');
-    setTimeout(function () { el.classList.remove('fading'); void el.offsetWidth; el.classList.remove('pre'); }, FADE);
+    setTimeout(function () {
+      // once faded, jump unseen to the start position, then draw as usual (rows come down from above)
+      el.classList.add('snap'); el.classList.remove('fading'); void el.offsetWidth;
+      el.classList.remove('snap', 'pre');
+    }, FADE);
     return FADE;
   }
   var step = -1, timer = null, visible = false, hover = false;
