@@ -826,7 +826,17 @@ rng.value = 40.5; render(40.5);
   // own turn while the other two stay drawn
   var vizs = [].slice.call(document.querySelectorAll('.mviz'));
   var box = document.querySelector('#method .steps');
-  var WAIT = [2700, 1900, 4900];         // after figure i starts: time until the next one redraws
+  var HOLD = 4000;                       // after figure 3 finishes, the pause before figure 1 redraws
+  // how long a figure's animation runs: the latest end of any transition inside it, read from the styles
+  function animLength(el) {
+    var max = 0;
+    [el].concat([].slice.call(el.querySelectorAll('*'))).forEach(function (n) {
+      var cs = getComputedStyle(n), du = cs.transitionDuration.split(','), de = cs.transitionDelay.split(',');
+      du.forEach(function (d, i) { var t = parseFloat(d) + parseFloat(de[i % de.length]); if (t > max) max = t; });
+    });
+    return max * 1000;
+  }
+  var LEN = vizs.map(animLength);
   function setPre(el, pre) { el.classList.add('snap'); el.classList.toggle('pre', pre); void el.offsetWidth; el.classList.remove('snap'); }
   function play(el) { setPre(el, true); setTimeout(function () { el.classList.remove('pre'); }, 40); }
   var step = -1, timer = null, visible = false, hover = false;
@@ -835,7 +845,8 @@ rng.value = 40.5; render(40.5);
     if (!visible || hover || document.hidden) return;
     step = (step + 1) % vizs.length;
     play(vizs[step]);
-    timer = setTimeout(tick, WAIT[step]);
+    // the next figure starts as soon as this one has finished
+    timer = setTimeout(tick, LEN[step] + 60 + (step === vizs.length - 1 ? HOLD : 0));
   }
   function pause() { clearTimeout(timer); timer = null; }
   function resume(delay) { if (!timer && visible && !hover && !document.hidden) timer = setTimeout(tick, delay); }
