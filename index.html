@@ -822,37 +822,39 @@ rng.value = 40.5; render(40.5);
 </script>
 <script>
 (function () {
-  var vizs = document.querySelectorAll('.mviz');
-  var PERIOD = 7000;                     // one play takes about 2 s, the rest is time to read
-  function replay(el) {
-    el.classList.add('snap', 'pre'); void el.offsetWidth; el.classList.remove('snap');
-    setTimeout(function () { el.classList.remove('pre'); }, 40);
+  // the three Method figures play in turn, 1 then 2 then 3, hold, and start again from blank figures
+  var vizs = [].slice.call(document.querySelectorAll('.mviz'));
+  var box = document.querySelector('#method .steps');
+  var WAIT = [2700, 1900, 4900];         // after figure i starts: time until the next one; the last is the hold before a new round
+  function setPre(el, pre) { el.classList.add('snap'); el.classList.toggle('pre', pre); void el.offsetWidth; el.classList.remove('snap'); }
+  function play(el) { setPre(el, true); setTimeout(function () { el.classList.remove('pre'); }, 40); }
+  var step = -1, timer = null, visible = false, hover = false;
+  function tick() {
+    timer = null;
+    if (!visible || hover || document.hidden) return;
+    step = (step + 1) % vizs.length;
+    if (step === 0) vizs.forEach(function (v) { setPre(v, true); });
+    play(vizs[step]);
+    timer = setTimeout(tick, WAIT[step]);
   }
-  // a figure repeats only while it is on screen, the tab is visible and the pointer is not over it
-  function schedule(v) {
-    clearTimeout(v._t);
-    v._t = setTimeout(function () {
-      if (v._vis && !v._hover && !document.hidden) replay(v);
-      schedule(v);
-    }, PERIOD);
-  }
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) {
-        var v = e.target;
-        v._vis = e.isIntersecting;
-        if (e.isIntersecting && !v._started) { v._started = true; v.classList.remove('pre'); schedule(v); }
-      });
-    }, { threshold: 0.4 });
+  function pause() { clearTimeout(timer); timer = null; }
+  function resume(delay) { if (!timer && visible && !hover && !document.hidden) timer = setTimeout(tick, delay); }
+  if ('IntersectionObserver' in window && box) {
     vizs.forEach(function (v) {
-      v.classList.add('pre'); io.observe(v);
-      v.addEventListener('mouseenter', function () { v._hover = true; });
-      v.addEventListener('mouseleave', function () { v._hover = false; });
+      v.classList.add('pre');
+      v.addEventListener('mouseenter', function () { hover = true; pause(); });
+      v.addEventListener('mouseleave', function () { hover = false; resume(500); });
     });
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      pause();
+      if (visible) { step = -1; resume(300); }      // coming back into view starts again from figure 1
+    }, { threshold: 0.15 }).observe(box);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) pause(); else { step = -1; resume(300); } });
   }
   vizs.forEach(function (v) {
     var b = v.querySelector('.replay');
-    if (b) b.addEventListener('click', function () { replay(v); if (v._started) schedule(v); });
+    if (b) b.addEventListener('click', function () { play(v); });
   });
 })();
 </script>
