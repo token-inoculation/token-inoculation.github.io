@@ -822,10 +822,11 @@ rng.value = 40.5; render(40.5);
 </script>
 <script>
 (function () {
-  // the three Method figures play in turn, 1 then 2 then 3, hold, and start again from blank figures
+  // the three Method figures play in turn, 1 then 2 then 3, and keep cycling: each one redraws on its
+  // own turn while the other two stay drawn
   var vizs = [].slice.call(document.querySelectorAll('.mviz'));
   var box = document.querySelector('#method .steps');
-  var WAIT = [2700, 1900, 4900];         // after figure i starts: time until the next one; the last is the hold before a new round
+  var WAIT = [2700, 1900, 4900];         // after figure i starts: time until the next one redraws
   function setPre(el, pre) { el.classList.add('snap'); el.classList.toggle('pre', pre); void el.offsetWidth; el.classList.remove('snap'); }
   function play(el) { setPre(el, true); setTimeout(function () { el.classList.remove('pre'); }, 40); }
   var step = -1, timer = null, visible = false, hover = false;
@@ -833,7 +834,6 @@ rng.value = 40.5; render(40.5);
     timer = null;
     if (!visible || hover || document.hidden) return;
     step = (step + 1) % vizs.length;
-    if (step === 0) vizs.forEach(function (v) { setPre(v, true); });
     play(vizs[step]);
     timer = setTimeout(tick, WAIT[step]);
   }
