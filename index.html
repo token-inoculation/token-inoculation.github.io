@@ -608,8 +608,8 @@ var cur = el('line',{y1:M.t,y2:H-M.b,stroke:'#1e293b','stroke-width':1.6,'stroke
 var NOTES = {
   0:'No sentence is marked. Fine-tuning runs on its own, the inoSFT-only condition.',
   1:'Marking more narrowly than t = 0.15 raises WMDP-Bio accuracy.',
-  2:'The setting of the method. The multiple-choice inoculation questions all have a hazard score of at least 0.15, so multiple-choice SU-F1 peaks where the two stages cut the hazard score at the same point. WMDP-Bio falls to 17.9% while MMLU-Virology holds at 48.2%.',
-  3:'99.9% of the 2,000 open-ended inoculation questions have a hazard score of at least 0.05, so open-ended SU-F1 peaks here, where the two stages cut the hazard score at nearly the same point, at a broader marking than the multiple-choice optimum. Marking contributes more under multiple choice, where the fine-tuning targets carry less information.',
+  2:'The setting of the method. Multiple-choice SU-F1 peaks here, where the marking threshold equals the hazard level of the inoculation questions: they all score at least 0.15. WMDP-Bio falls to 17.9% while MMLU-Virology holds at 48.2%.',
+  3:'99.9% of the 2,000 open-ended inoculation questions have a hazard score of at least 0.05, so open-ended SU-F1 peaks here, where the marking threshold nearly equals the hazard level of the inoculation questions, at a broader marking than the multiple-choice optimum. Marking contributes more under multiple choice, where the fine-tuning targets carry less information.',
   4:'Marking more broadly than t = 0.15 lowers MMLU-Virology accuracy.'
 };
 
